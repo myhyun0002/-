@@ -10,7 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     // 주석
-
+    // 잘 되나 확인
     <fragment
         android:id="@+id/map_fragment"
         android:layout_width="match_parent"
