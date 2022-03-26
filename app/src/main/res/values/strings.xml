@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">wither</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textview">TextView</string>
+    <string name="홈">홈</string>
+    <string name="my_page">My Page</string>
+    <string name="home">home</string>
+    <string name="chat" />
+    <string name="chatting">chatting</string>
+    <string name="Home">Home</string>
+    <string name="Chat">Chat</string>
+    <string name="My_Wither">My 위더</string>
+</resources>
