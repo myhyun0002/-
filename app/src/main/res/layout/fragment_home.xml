@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment"
     android:orientation="vertical">
-// 김성휘
+// 김성휘입니다
     <!-- TODO: Update blank fragment layout -->
 
 
