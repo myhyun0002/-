@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
 
     // 여기 코드들은 하단 버튼을 눌렀을 때 그에 맞는 페이지를 보여주기 위한 코드들입니다.
+
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;

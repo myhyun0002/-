@@ -9,7 +9,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    // 주석
 
     <fragment
         android:id="@+id/map_fragment"
