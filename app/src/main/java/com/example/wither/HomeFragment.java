@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         marker.setIcon(OverlayImage.fromResource(R.drawable.ic_home));
         this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
-
+    // 마커 표시
     }
 
         @Override
