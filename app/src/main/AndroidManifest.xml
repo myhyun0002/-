@@ -26,6 +26,8 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="wayunkrpqw" />
-    </application>
 
+    </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 </manifest>
