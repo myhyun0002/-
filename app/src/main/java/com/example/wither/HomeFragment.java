@@ -1,10 +1,14 @@
 package com.example.wither;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -16,15 +20,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.LocationButtonView;
 
 import java.security.Permission;
 import java.util.Objects;
@@ -90,7 +99,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        return view;
 
     }
 
@@ -100,17 +112,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         // 지도 상에 마커 표시
         Marker marker = new Marker();
-        marker.setPosition(new LatLng(37.5670135,126.9783740));
+        marker.setPosition(new LatLng(37.23,102));
 
+//        LocationOverlay locationOverlay = naverMap.getLocationOverlay();
+//        marker.setIcon(OverlayImage.fromResource(R.drawable.ic_chat));
+//        locationOverlay.setVisible(true);
+//        locationOverlay.setIcon(OverlayImage.fromResource(R.drawable.ic_chat1));
+//        locationOverlay.setIconWidth(50);
+//        locationOverlay.setIconHeight(50);
+//        locationOverlay.setAnchor(new PointF(0.5f, 1));
 
         // NaverMap 객체 받아서 NaverMap 객체에 위치 소스 지정
         mNaverMap = naverMap;
         mNaverMap.setLocationSource(mLocationSource);
 
-        marker.setIcon(OverlayImage.fromResource(R.drawable.ic_home));
         this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
-    // 마커 표시
+        // 현위치 버튼 생성
+        UiSettings uiSettings = mNaverMap.getUiSettings();
+        uiSettings.setLocationButtonEnabled(true);
+        uiSettings.setZoomControlEnabled(true);
+
+        // 네이버 로고 위치 지정
+        uiSettings.setLogoGravity(getView().getTop());
+        uiSettings.setLogoMargin(940,30,30,0);
+
+        //기울임 틸트 비활성화
+        uiSettings.setTiltGesturesEnabled(false);
+        uiSettings.setRotateGesturesEnabled(false);
+        uiSettings.setScaleBarEnabled(false);
+
+        // 마커 표시
     }
 
         @Override

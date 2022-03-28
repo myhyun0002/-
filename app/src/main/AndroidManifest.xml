@@ -14,8 +14,10 @@
         android:appComponentFactory="@string/app_name"
         tools:targetApi="p">
 
+        <!--가로 모드 비활성화 : screenOrientation="portrait" -->
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
