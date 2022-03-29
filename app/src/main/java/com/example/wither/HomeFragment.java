@@ -34,6 +34,7 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
+import com.naver.maps.map.widget.ZoomControlView;
 
 import java.security.Permission;
 import java.util.Objects;
@@ -102,6 +103,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        //ZoomControlView zoomControlView = view.findViewById(R.id.zoom);
+        //zoomControlView.setMap(mNaverMap);
+
         return view;
 
     }
@@ -112,7 +116,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         // 지도 상에 마커 표시
         Marker marker = new Marker();
-        marker.setPosition(new LatLng(37.23,102));
+
+        marker.setPosition(new LatLng(34,102));
 
 //        LocationOverlay locationOverlay = naverMap.getLocationOverlay();
 //        marker.setIcon(OverlayImage.fromResource(R.drawable.ic_chat));
@@ -128,21 +133,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
-        // 현위치 버튼 생성
+        // 현위치 버튼 , zoom버튼 생성
         UiSettings uiSettings = mNaverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
-        uiSettings.setZoomControlEnabled(true);
+        uiSettings.setZoomControlEnabled(false);
+
+
 
         // 네이버 로고 위치 지정
-        uiSettings.setLogoGravity(getView().getTop());
-        uiSettings.setLogoMargin(940,30,30,0);
+        //uiSettings.setLogoGravity(getView().getTop());
+        //uiSettings.setLogoMargin(940,30,30,0);
 
-        //기울임 틸트 비활성화
+        //기울임 틸트 비율 비활성화
         uiSettings.setTiltGesturesEnabled(false);
         uiSettings.setRotateGesturesEnabled(false);
         uiSettings.setScaleBarEnabled(false);
 
-        // 마커 표시
+
     }
 
         @Override
