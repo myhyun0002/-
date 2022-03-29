@@ -91,7 +91,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             fm.beginTransaction().add(R.id.map_fragment,mapFragment).commit();
         }
 
-
         mapFragment.getMapAsync(this);
         mLocationSource = new FusedLocationSource(this,PERMISSION_REQUEST_CODE);
     }
