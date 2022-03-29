@@ -1,49 +1,35 @@
 package com.example.wither;
 
 import android.Manifest;
-import android.content.Context;
+
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.PointF;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
+import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.NaverMapOptions;
+
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.LocationOverlay;
+
 import com.naver.maps.map.overlay.Marker;
-import com.naver.maps.map.overlay.OverlayImage;
+
 import com.naver.maps.map.util.FusedLocationSource;
-import com.naver.maps.map.widget.LocationButtonView;
-import com.naver.maps.map.widget.ZoomControlView;
 
-import java.security.Permission;
-import java.util.Objects;
-
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link HomeFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
@@ -58,32 +44,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     private FusedLocationSource mLocationSource;
     private NaverMap mNaverMap;
 
-
     public HomeFragment() {
         // Required empty public constructor
+
+        //onMapReady(mNaverMap);
     }
-
-
-
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-
-//    public static HomeFragment newInstance(String param1, String param2) {
-//        HomeFragment fragment = new HomeFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-                // 밑에는 지도 마커 표시를 위한 코드다
         FragmentManager fm = getParentFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map_fragment);
         if(mapFragment == null){
@@ -93,6 +63,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         mapFragment.getMapAsync(this);
         mLocationSource = new FusedLocationSource(this,PERMISSION_REQUEST_CODE);
+
+
+
+
+                // 밑에는 지도 마커 표시를 위한 코드다
+
     }
 
     @Override
@@ -100,24 +76,30 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        Marker marker = new Marker();
+        marker.setPosition(new LatLng(34,102));
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //ZoomControlView zoomControlView = view.findViewById(R.id.zoom);
-        //zoomControlView.setMap(mNaverMap);
-
+        // 다른 탭으로 이동 후에 다시 돌아와도 지도 초기화 안되게 하는 코드
+        MapView mapView;
+        mapView = (MapView)view.findViewById(R.id.map_fragment);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this); // 비동기적 방식으로 구글 맵 실행
         return view;
 
     }
 
-        // 지도 마커 표시를 위한 메서드
+
+
+    // 지도 마커 표시를 위한 메서드
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
 
         // 지도 상에 마커 표시
-        Marker marker = new Marker();
 
-        marker.setPosition(new LatLng(34,102));
 
+        // 마커 아이콘 등록
 //        LocationOverlay locationOverlay = naverMap.getLocationOverlay();
 //        marker.setIcon(OverlayImage.fromResource(R.drawable.ic_chat));
 //        locationOverlay.setVisible(true);
@@ -133,11 +115,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
         // 현위치 버튼 , zoom버튼 생성
+
         UiSettings uiSettings = mNaverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
         uiSettings.setZoomControlEnabled(false);
-
-
 
         // 네이버 로고 위치 지정
         //uiSettings.setLogoGravity(getView().getTop());
@@ -147,8 +128,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         uiSettings.setTiltGesturesEnabled(false);
         uiSettings.setRotateGesturesEnabled(false);
         uiSettings.setScaleBarEnabled(false);
-
-
     }
 
         @Override
@@ -161,7 +140,4 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             }
         }
     }
-
-
-
 }

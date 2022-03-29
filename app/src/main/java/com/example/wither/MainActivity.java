@@ -3,16 +3,16 @@ package com.example.wither;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -23,15 +23,10 @@ public class MainActivity extends AppCompatActivity  {
     private UserFragment userFragment;
 
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         //밑에는 fragment 간 교체를 위한 코드다
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -54,28 +49,29 @@ public class MainActivity extends AppCompatActivity  {
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
 
-        setFrag(0); // 첫 fragment 화면을 homeFragment로 한다.
-
+        setFrag(0);
     }
 
-        // 프래그먼트 교체가 일어나는 실행문이다.
+         //프래그먼트 교체가 일어나는 실행문이다.
     private void setFrag(int n){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         switch(n){
             case 0:
-                fragmentTransaction.replace(R.id.main_frame,homeFragment);
+                fragmentTransaction. replace(R.id.main_frame,homeFragment).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
-
             case 1:
-                fragmentTransaction.replace(R.id.main_frame,chattingFragment);
+                fragmentTransaction. replace(R.id.main_frame,chattingFragment).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
             case 2:
-                fragmentTransaction.replace(R.id.main_frame,userFragment);
+                fragmentTransaction.replace(R.id.main_frame,userFragment).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
         }
     }
+
+
 }
