@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
 
-        //김동찬 연동 확인용
+        //김동찬 연동 확인용**
         //밑에는 fragment 간 교체를 위한 코드다
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
