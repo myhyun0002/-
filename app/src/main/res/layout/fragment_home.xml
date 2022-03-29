@@ -22,6 +22,7 @@
         android:layout_marginTop="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:contentDescription="@string/플러스버튼"
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,12 +37,27 @@
         app:maxImageSize="56dp"
         android:src="@drawable/plus"
         app:fabCustomSize="75dp"
-        android:contentDescription="@string/플러스버튼"
         android:scaleType="fitXY"
         android:elevation="8dp"
         android:focusable="true" />
 
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/list_button"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@string/목록버튼"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        android:layout_centerHorizontal="true"
+        tools:ignore="RelativeOverlap"
+        app:fabSize="mini"
+        app:maxImageSize="20dp"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/rounded_rectangle_solid"
+        android:clickable="true"
+        />
 
 </RelativeLayout>
 
