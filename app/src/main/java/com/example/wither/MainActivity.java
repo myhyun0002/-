@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity  {
         setFrag(0);
     }
 
+
          //프래그먼트 교체가 일어나는 실행문이다.
     private void setFrag(int n){
         FragmentManager fragmentManager = getSupportFragmentManager();

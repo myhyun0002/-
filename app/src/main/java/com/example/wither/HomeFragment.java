@@ -64,11 +64,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(this);
         mLocationSource = new FusedLocationSource(this,PERMISSION_REQUEST_CODE);
 
-
-
-
-                // 밑에는 지도 마커 표시를 위한 코드다
-
     }
 
     @Override
@@ -89,7 +84,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         return view;
 
     }
-
 
 
     // 지도 마커 표시를 위한 메서드
