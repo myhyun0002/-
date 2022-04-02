@@ -19,7 +19,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="1dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:contentDescription="@string/플러스버튼"
@@ -36,12 +36,13 @@
         android:backgroundTint="#0099FF"
         app:maxImageSize="56dp"
         android:src="@drawable/plus"
-        app:fabCustomSize="75dp"
+        app:fabCustomSize="65dp"
         android:scaleType="fitXY"
         android:elevation="8dp"
-        android:focusable="true" />
+        android:focusable="true"
+        tools:ignore="RelativeOverlap" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_marginBottom="20dp"
@@ -55,9 +56,21 @@
         app:fabSize="mini"
         app:maxImageSize="20dp"
         android:backgroundTint="@color/white"
-        android:background="@drawable/rounded_rectangle_solid"
         android:clickable="true"
         />
+
+    <ImageButton
+        android:id="@+id/button3"
+        android:layout_width="55dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="16dp"
+        android:backgroundTint="@color/white"
+        android:baselineAlignBottom="true"
+        android:src="@drawable/ic_gps2" />
+
 
 </RelativeLayout>
 
