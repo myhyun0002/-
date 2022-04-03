@@ -6,56 +6,29 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.naver.maps.map.LocationTrackingMode;
-import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private FusedLocationProviderClient fusedLocationClient;
+    private double latitude,longitude;
 
     private HomeFragment homeFragment;
     private ChattingFragment chattingFragment;
@@ -76,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        homeFragment = new HomeFragment();
+        chattingFragment = new ChattingFragment();
+        userFragment = new UserFragment();
+
+        // 위치 확인
         if (!checkLocationServicesStatus()) {
 
             showDialogForLocationServiceSetting();
@@ -83,6 +63,27 @@ public class MainActivity extends AppCompatActivity {
 
             checkRunTimePermission();
         }
+
+        //현재 위치를 실시간으로 가져오는 코드
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+
+                            Bundle bundle = new Bundle(2);
+                            bundle.putDouble("latitude", latitude );
+                            bundle.putDouble("longitude", longitude );
+                            homeFragment.setArguments(bundle);
+                        }
+                    }
+                });
 
         //밑에는 fragment 간 교체를 위한 코드
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -101,10 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        homeFragment = new HomeFragment();
-        chattingFragment = new ChattingFragment();
-        userFragment = new UserFragment();
-
+        // 초기 fragment homeFragment로 설정
         setFrag(0);
     }
 
@@ -117,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             case 0:
                 fragmentTransaction.replace(R.id.main_frame, homeFragment).addToBackStack(null);
                 fragmentTransaction.commit();
+
                 break;
             case 1:
                 fragmentTransaction.replace(R.id.main_frame, chattingFragment).addToBackStack(null);
@@ -129,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    // 여기서부터는 gps 받아오는 코드)
+    // 여기서부터는 gps 받아오는 코드
     @Override
     public void onRequestPermissionsResult(int permsRequestCode,
                                            @NonNull String[] permissions,
@@ -220,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // 경도 위도를 통한 도로명 주소 도출 메서드
     public String getCurrentAddress( double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
@@ -256,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //여기부터는 GPS 활성화를 위한 메소드들
+    //gps 설정 메서드
     private void showDialogForLocationServiceSetting() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -281,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-
+    // gps 요청 메서드
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -304,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // gps 허용 여부 메서드
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 

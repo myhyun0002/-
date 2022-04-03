@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:layout_alignParentEnd="true"
     tools:context=".HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/homeFragment">
     <!-- TODO: Update blank fragment layout -->
 
 
@@ -61,15 +62,27 @@
 
     <ImageButton
         android:id="@+id/button3"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="19dp"
+        android:layout_marginLeft="20dp"
         android:backgroundTint="@color/white"
         android:baselineAlignBottom="true"
-        android:src="@drawable/ic_gps2" />
+        android:src="@drawable/ic_gps"
+        android:scaleType="centerCrop"
+        android:outlineSpotShadowColor="@color/black"
+        />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginBottom="182dp"-->
+<!--        android:text="TextView" />-->
 
 
 </RelativeLayout>
