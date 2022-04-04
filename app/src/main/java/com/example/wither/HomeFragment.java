@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private double latitude, longitude;
     Location location;
     private Marker marker = new Marker();
+    private int count;  // 처음 실행시에만 사용자 gps로 돌아가게 함
 
     public HomeFragment() {
 
@@ -90,23 +91,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         //activity에서 실시간 위치 정보 가져옴
-        Bundle bundle = getArguments();
 
-        if(bundle != null){
-            setLatitude(bundle.getDouble("latitude"));
-            setLongitude(bundle.getDouble("longitude"));
 
-            setMarker(marker,getLatitude(),getLongitude(),R.drawable.ic_marker2);
-            marker.setIconTintColor(Color.rgb(30,144,255));
-
-            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
-            mNaverMap.moveCamera(cameraUpdate);
-
-//            if(latitude != 0.0){
-//                TextView textView = (TextView)view.findViewById(R.id.textView);
-//                textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude());
-//            }
-        }
+        TextView textView = (TextView)view.findViewById(R.id.textView);
+        textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude()+"\n" + count);
 
 
         // 다른 탭으로 이동 후에 다시 돌아와도 지도 초기화 안되게 하는 코드
@@ -128,6 +116,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mNaverMap.setLocationSource(mLocationSource);
 
 //        this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
+
+        Bundle bundle = getArguments();
+        count = bundle.getInt("count");
+        if(bundle != null){
+            setLatitude(bundle.getDouble("latitude"));
+            setLongitude(bundle.getDouble("longitude"));
+
+            setMarker(marker,getLatitude(),getLongitude(),R.drawable.ic_marker2);
+            marker.setIconTintColor(Color.rgb(30,144,255));
+
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
+            mNaverMap.moveCamera(cameraUpdate);
+
+        }
 
         // 현위치 버튼 , zoom버튼 생성
         UiSettings uiSettings = mNaverMap.getUiSettings();

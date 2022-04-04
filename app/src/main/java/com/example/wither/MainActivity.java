@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private ChattingFragment chattingFragment;
     private UserFragment userFragment;
+    private static int count = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
 
-                            Bundle bundle = new Bundle(2);
+                            Bundle bundle = new Bundle(3);
                             bundle.putDouble("latitude", latitude );
                             bundle.putDouble("longitude", longitude );
+                            bundle.putInt("count",count++);
                             homeFragment.setArguments(bundle);
                         }
                     }
