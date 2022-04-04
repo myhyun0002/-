@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private UserFragment userFragment;
     private static int count = 0;
 
+    // 두번 뒤로가기 눌렀을 때 앱 종료
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,47 +91,142 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         //밑에는 fragment 간 교체를 위한 코드
+        // 첫번재 버전은 한번만 fragment를 불러오고 hide show하여 단지 안보이게 한다.
+        // 이렇게 하면 뒤로가기를 하면 이전 fragment가 아닌 앱이 종료가 된다.
+        // 하지만 다른 fragment로 넘나들 때 이 전께 그저 hide된 거기 때문에 다시 돌아오면 가기 전 상태 그대로 있다.
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.main_frame, homeFragment, "home")
+                .commitAllowingStateLoss();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-                int itemId = menuitem.getItemId();
-                if (itemId == R.id.action_home) {
-                    setFrag(0);
-                } else if (itemId == R.id.action_chat) {
-                    setFrag(1);
-                } else if (itemId == R.id.action_user) {
-                    setFrag(2);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                /**각 탭에 아이디의 따라 다르게 띄워주기*/
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                switch (item.getItemId()) {
+                    case R.id.action_home:  {
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            //프래그먼트가 존재한다면 보여준다.
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
+                        } else {
+                            //존재하지 않는다면 프래그먼트를 매니저에 추가
+                            fragmentManager.beginTransaction().add(R.id.main_frame, new HomeFragment(), "home").commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("chatting") != null) {
+                            //다른프래그먼트가 보이면 가려준다.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("chatting")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("user") != null) {
+                            //다른프래그먼트가 보이면 가려준다.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("user")).commit();
+                        }
+                        return true;
+                    }
+                    case R.id.action_chat:  {
+
+                        if (fragmentManager.findFragmentByTag("chatting") != null) {
+                            //if the fragment exists, show it.
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("chatting")).commit();
+                        } else {
+                            //if the fragment does not exist, add it to fragment manager.
+                            fragmentManager.beginTransaction().add(R.id.main_frame, new ChattingFragment(), "chatting").commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("user") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("user")).commit();
+                        }
+
+                        return true;
+                    }
+                    case R.id.action_user:  {
+
+                        if (fragmentManager.findFragmentByTag("user") != null) {
+                            //if the fragment exists, show it.
+                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("user")).commit();
+                        } else {
+                            //if the fragment does not exist, add it to fragment manager.
+                            fragmentManager.beginTransaction().add(R.id.main_frame, new UserFragment(), "user").commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("home") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                        }
+                        if (fragmentManager.findFragmentByTag("chatting") != null) {
+                            //if the other fragment is visible, hide it.
+                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("chatting")).commit();
+                        }
+
+                        return true;
+                    }
+
+                    default:return false;
                 }
-                return true;
             }
         });
-
-        // 초기 fragment homeFragment로 설정
-        setFrag(0);
     }
 
-    //프래그먼트 교체가 일어나는 실행문
-    private void setFrag(int n) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        switch (n) {
-            case 0:
-                fragmentTransaction.replace(R.id.main_frame, homeFragment).addToBackStack(null);
-                fragmentTransaction.commit();
+    // 두번째 버전은 하단메뉴를 누를 때마다 fragment가 replace되면서 뒤로가기 버튼을 누르면
+    // 아까 전 fragment로 옮겨간다. 하지만 fragment가 계속 새로 생성되기 때문에 그 전에 정보들이 초기화된다.
 
-                break;
-            case 1:
-                fragmentTransaction.replace(R.id.main_frame, chattingFragment).addToBackStack(null);
-                fragmentTransaction.commit();
-                break;
-            case 2:
-                fragmentTransaction.replace(R.id.main_frame, userFragment).addToBackStack(null);
-                fragmentTransaction.commit();
-                break;
-        }
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
+//        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
+//                int itemId = menuitem.getItemId();
+//                if (itemId == R.id.action_home) {
+//                    setFrag(0);
+//                } else if (itemId == R.id.action_chat) {
+//                    setFrag(1);
+//                } else if (itemId == R.id.action_user) {
+//                    setFrag(2);
+//                }
+//                return true;
+//            }
+//        });
+//
+//        // 초기 fragment homeFragment로 설정
+//        setFrag(0);
+
+
+//    //프래그먼트 교체가 일어나는 실행문
+//    private void setFrag(int n) {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        switch (n) {
+//            case 0:
+//                fragmentTransaction.replace(R.id.main_frame, homeFragment).addToBackStack(null);
+//                fragmentTransaction.commit();
+//
+//                break;
+//            case 1:
+//                fragmentTransaction.replace(R.id.main_frame, chattingFragment).addToBackStack(null);
+//                fragmentTransaction.commit();
+//                break;
+//            case 2:
+//                fragmentTransaction.replace(R.id.main_frame, userFragment).addToBackStack(null);
+//                fragmentTransaction.commit();
+//                break;
+//        }
+//    }
+
+    public void onBackPressed() {
+        /* 다음 4가지 형태 중 하나 선택해서 사용 */
+
+        //backKeyHandler.onBackPressed();
+        //backKeyHandler.onBackPressed("\'뒤로\' 버튼을 두 번 누르면 종료됩니다.\n입력한 내용이 지워집니다.");
+        //backKeyHandler.onBackPressed(5);
+        backKeyHandler.onBackPressed("5초 내로 '뒤로' 버튼을 한번 더 누르면, 앱이 종료됩니다 ", 5);
     }
+
+
 
     // 여기서부터는 gps 받아오는 코드
     @Override

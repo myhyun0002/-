@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 // 지도에 마커 표시
                 setMarker(marker,getLatitude(),getLongitude(),R.drawable.ic_marker2);
-                marker.setIconTintColor(Color.rgb(30,50,255));
+                marker.setIconTintColor(Color.rgb(30,144,255));
 
                 // 현위치로 지도 이동
                 CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
@@ -93,8 +93,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //activity에서 실시간 위치 정보 가져옴
 
 
-        TextView textView = (TextView)view.findViewById(R.id.textView);
-        textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude()+"\n" + count);
+//        TextView textView = (TextView)view.findViewById(R.id.textView);
+//        textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude()+"\n" + count);
 
 
         // 다른 탭으로 이동 후에 다시 돌아와도 지도 초기화 안되게 하는 코드
