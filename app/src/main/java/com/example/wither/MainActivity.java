@@ -6,9 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,29 +28,34 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    // 여기 코드들은 하단 버튼을 눌렀을 때 그에 맞는 페이지를 보여주기 위한 코드들입니다.
-
+    // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    private FusedLocationProviderClient fusedLocationClient;
     private double latitude,longitude;
 
+    // fragment 변수 선언
     private HomeFragment homeFragment;
     private ChattingFragment chattingFragment;
     private UserFragment userFragment;
-    private static int count = 0;
+    private HomeFloatingFragment homeFlaotingActionFragment;
 
-    // 두번 뒤로가기 눌렀을 때 앱 종료
-    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
+    private FragmentActivity myContext;
+    FloatingActionButton fab;
+
+
+    // 두번 뒤로가기 눌렀을 때 앱 종료 자바 클래스
+    private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,15 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         // 위치 확인
         if (!checkLocationServicesStatus()) {
-
             showDialogForLocationServiceSetting();
         }else {
-
             checkRunTimePermission();
         }
 
         //현재 위치를 실시간으로 가져오는 코드
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -81,10 +86,9 @@ public class MainActivity extends AppCompatActivity {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
 
-                            Bundle bundle = new Bundle(3);
+                            Bundle bundle = new Bundle(2);
                             bundle.putDouble("latitude", latitude );
                             bundle.putDouble("longitude", longitude );
-                            bundle.putInt("count",count++);
                             homeFragment.setArguments(bundle);
                         }
                     }
@@ -98,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_frame, homeFragment, "home")
                 .commitAllowingStateLoss();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 /**각 탭에 아이디의 따라 다르게 띄워주기*/
@@ -109,18 +115,18 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_home:  {
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //프래그먼트가 존재한다면 보여준다.
-                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
+                            fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("home"))).commit();
                         } else {
                             //존재하지 않는다면 프래그먼트를 매니저에 추가
                             fragmentManager.beginTransaction().add(R.id.main_frame, new HomeFragment(), "home").commit();
                         }
                         if (fragmentManager.findFragmentByTag("chatting") != null) {
                             //다른프래그먼트가 보이면 가려준다.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("chatting")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("chatting"))).commit();
                         }
                         if (fragmentManager.findFragmentByTag("user") != null) {
                             //다른프래그먼트가 보이면 가려준다.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("user")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("user"))).commit();
                         }
                         return true;
                     }
@@ -128,43 +134,40 @@ public class MainActivity extends AppCompatActivity {
 
                         if (fragmentManager.findFragmentByTag("chatting") != null) {
                             //if the fragment exists, show it.
-                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("chatting")).commit();
+                            fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("chatting"))).commit();
                         } else {
                             //if the fragment does not exist, add it to fragment manager.
                             fragmentManager.beginTransaction().add(R.id.main_frame, new ChattingFragment(), "chatting").commit();
                         }
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //if the other fragment is visible, hide it.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("home"))).commit();
                         }
                         if (fragmentManager.findFragmentByTag("user") != null) {
                             //if the other fragment is visible, hide it.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("user")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("user"))).commit();
                         }
-
                         return true;
                     }
                     case R.id.action_user:  {
 
                         if (fragmentManager.findFragmentByTag("user") != null) {
                             //if the fragment exists, show it.
-                            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("user")).commit();
+                            fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("user"))).commit();
                         } else {
                             //if the fragment does not exist, add it to fragment manager.
                             fragmentManager.beginTransaction().add(R.id.main_frame, new UserFragment(), "user").commit();
                         }
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //if the other fragment is visible, hide it.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("home"))).commit();
                         }
                         if (fragmentManager.findFragmentByTag("chatting") != null) {
                             //if the other fragment is visible, hide it.
-                            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("chatting")).commit();
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("chatting"))).commit();
                         }
-
                         return true;
                     }
-
                     default:return false;
                 }
             }
@@ -217,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+    // 뒤로 가기 두번 눌렀을 때 앱이 종료하게 하는 메서드 호출
     public void onBackPressed() {
         /* 다음 4가지 형태 중 하나 선택해서 사용 */
 
@@ -251,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if (check_result) {
+            if(check_result) {
 
                 //위치 값을 가져올 수 있음
                 ;

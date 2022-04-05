@@ -1,6 +1,5 @@
 package com.example.wither;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,16 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 
-import com.google.android.gms.location.LocationServices;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraUpdate;
 
@@ -35,7 +37,7 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
-import org.w3c.dom.Text;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -50,7 +52,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private double latitude, longitude;
     Location location;
     private Marker marker = new Marker();
-    private int count;  // 처음 실행시에만 사용자 gps로 돌아가게 함
+
+
+    private HomeFloatingFragment homeFlaotingActionFragment;
+    private FragmentActivity myContext;
+
 
     public HomeFragment() {
 
@@ -69,7 +75,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // 현위치 버튼 클릭시 현재 위치로 이동과 함께 마커 표시
-        ImageButton ShowLocationButton = (ImageButton)view.findViewById(R.id.button3);
+        ImageButton ShowLocationButton = (ImageButton)view.findViewById(R.id.gpsbtn);
         ShowLocationButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -104,6 +110,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
         mapView.getMapAsync(this); // 비동기적 방식으로 구글 맵 실행
 
+        // 홈화면 floatingbutton 누르면 HomeFloatingFragment 띄우기
+        FragmentManager fm = getChildFragmentManager();
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floatingActionButton);
+        homeFlaotingActionFragment = new HomeFloatingFragment();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fm.findFragmentByTag("homefloatingbtn") != null) {
+                    //if the fragment exists, show it.
+                    fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
+                } else {
+                    //if the fragment does not exist, add it to fragment manager.
+                    fm.beginTransaction().add(R.id.homeFragmentFrame, homeFlaotingActionFragment, "homefloatingbtn").commit();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -118,7 +142,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 //        this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
         Bundle bundle = getArguments();
-        count = bundle.getInt("count");
+
         if(bundle != null){
             setLatitude(bundle.getDouble("latitude"));
             setLongitude(bundle.getDouble("longitude"));
