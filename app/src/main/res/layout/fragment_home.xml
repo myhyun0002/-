@@ -62,18 +62,20 @@
 
     <ImageButton
         android:id="@+id/gpsbtn"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="19dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
-        android:backgroundTint="@color/white"
+        android:layout_marginBottom="17dp"
         android:baselineAlignBottom="true"
-        android:src="@drawable/ic_gps"
-        android:scaleType="centerCrop"
+        android:padding="10dp"
         android:outlineSpotShadowColor="@color/black"
-        />
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_gps"
+
+        android:background="@drawable/homefragment_gps_button"
+        android:requiresFadingEdge="vertical"/>
 
 <!--    <TextView-->
 <!--        android:id="@+id/textView"-->
