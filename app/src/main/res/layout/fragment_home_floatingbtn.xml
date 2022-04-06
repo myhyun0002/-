@@ -121,7 +121,7 @@
         android:textSize="18dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -130,5 +130,18 @@
         android:layout_marginTop="193dp"
         android:text="날짜 선택"
         android:backgroundTint="#A9A9A9"/>
+
+    <TextView
+        android:id="@+id/date_picker_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="206dp"
+        android:layout_marginEnd="63dp"
+        android:gravity="left"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="18dp" />
 
 </RelativeLayout>
