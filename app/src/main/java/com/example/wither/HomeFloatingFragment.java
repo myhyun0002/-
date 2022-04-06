@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -34,10 +35,17 @@ public class HomeFloatingFragment extends Fragment {
 
     DatePickerDialog datePickerDialog;
     Calendar calendar = Calendar.getInstance();
-    int pYear = calendar.get(Calendar.YEAR); //년
-    int pMonth = calendar.get(Calendar.MONTH);//월
-    int pDay = calendar.get(Calendar.DAY_OF_MONTH);//일
+    private int today_Year = calendar.get(Calendar.YEAR); //년
+    private int today_Month = calendar.get(Calendar.MONTH);//월
+    private int today_Day = calendar.get(Calendar.DAY_OF_MONTH);//일
 
+    private int date_year = 0;
+    private int date_month = 0;
+    private int date_day = 0;
+
+    private String create_name_variable;
+    private int create_person_num_variable;
+    private String create_for_friend_variable;
 
     public HomeFloatingFragment() {
 
@@ -56,11 +64,71 @@ public class HomeFloatingFragment extends Fragment {
 
         // 날짜 선택 버튼
         dateText = view.findViewById(R.id.date_picker_text);
-        Button button = view.findViewById(R.id.date);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button date_button = view.findViewById(R.id.date);
+        date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDate();
+            }
+        });
+
+        // 생성 버튼 리스너
+        EditText create_name_edit_text = (EditText)view.findViewById(R.id.creat_name);
+        EditText create_person_num_edit_text = (EditText)view.findViewById(R.id.create_person_num);
+        EditText create_for_friend_edit_text = (EditText)view.findViewById(R.id.create_for_friend);
+
+        Button make_button = view.findViewById(R.id.create_make_btn);
+        make_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if ( create_name_edit_text.getText().toString().length() == 0 ) {
+                    //모임 이름이 공백일 때 처리할 내용
+                    Toast.makeText(getActivity(),"모임 이름을 설정해주세요",Toast.LENGTH_SHORT).show();
+                } else {
+                    //모임 이름이 공백이 아닐 때 처리할 내용
+                    create_name_variable = create_name_edit_text.getText().toString();
+                    if ( create_person_num_edit_text.getText().toString().length() == 0 ) {
+                        //인원이 공백일 때 처리할 내용
+                        Toast.makeText(getActivity(),"인원을 입력해주세요",Toast.LENGTH_SHORT).show();
+                    } else {
+                        //인원이 공백이 아닐 때 처리할 내용
+                        create_person_num_variable = Integer.parseInt(create_person_num_edit_text.getText().toString());
+                        if ( create_for_friend_edit_text.getText().toString().length() == 0 ) {
+                            //친구 메세지가 공백일 때 처리할 내용
+                            Toast.makeText(getActivity(),"친구들에게 메세지를 전하세요",Toast.LENGTH_SHORT).show();
+                        } else {
+                            create_for_friend_variable = create_for_friend_edit_text.getText().toString();
+                            //공백이 없을 때 처리할 내용
+                            if(getDate_day() == 0){
+                                Toast.makeText(getActivity(),"날짜를 선택해주세요",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getActivity(),create_name_variable + "," + create_person_num_variable + ","+
+                                        create_for_friend_variable+"\n"+getDate_year()+ ","+ getDate_month()+","+getDate_day(),Toast.LENGTH_LONG).show();
+
+                                FragmentManager fm = getParentFragmentManager();
+                                fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
+
+                                setDate_day(0);
+                                setDate_month(0);
+                                setDate_year(0);
+
+                                create_name_edit_text.setText(null);
+                                create_person_num_edit_text.setText(null);
+                                create_for_friend_edit_text.setText(null);
+
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        Button cancel_button = view.findViewById(R.id.create_cancel_btn);
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getParentFragmentManager();
+                fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
             }
         });
 
@@ -79,9 +147,15 @@ public class HomeFloatingFragment extends Fragment {
                         month = month + 1;
                         String date = year + "/" + month + "/" + day;
 
+                        setDate_year(year);
+                        setDate_month(month);
+                        setDate_day(day);
+
+                        date_day = day;
+
                         dateText.setText(date);
                     }
-                }, pYear, pMonth, pDay);
+                }, today_Year, today_Month,today_Day);
         datePickerDialog.show();
     }
 
@@ -99,4 +173,29 @@ public class HomeFloatingFragment extends Fragment {
 //        timePickerDialog.setMessage("메시지");
 //        timePickerDialog.show();
 //    }
+
+
+    public int getDate_day() {
+        return date_day;
+    }
+
+    public void setDate_day(int date_day) {
+        this.date_day = date_day;
+    }
+
+    public int getDate_month() {
+        return date_month;
+    }
+
+    public void setDate_month(int date_month) {
+        this.date_month = date_month;
+    }
+
+    public int getDate_year() {
+        return date_year;
+    }
+
+    public void setDate_year(int date_year) {
+        this.date_year = date_year;
+    }
 }
