@@ -110,6 +110,7 @@ public class HomeFloatingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDate();
+
                 keyboradDownEditText(create_name_edit_text);
                 keyboradDownEditText(create_person_num_edit_text);
                 keyboradDownEditText(create_for_friend_edit_text);
@@ -142,37 +143,29 @@ public class HomeFloatingFragment extends Fragment {
                             //친구 메세지가 공백일 때 처리할 내용
                             Toast.makeText(getActivity(),"친구들에게 메세지를 전하세요",Toast.LENGTH_SHORT).show();
                         } else {
-                            setCreate_for_friend_variable(create_for_friend_edit_text.getText().toString());
                             //공백이 없을 때 처리할 내용
+                            setCreate_for_friend_variable(create_for_friend_edit_text.getText().toString());
                             if(getDate_day() == 0){
+                                // 날짜 선택을 안 했을 때
                                 Toast.makeText(getActivity(),"날짜를 선택해주세요",Toast.LENGTH_SHORT).show();
                             }else{
-
+                                // 날짜 선택 했을 때
                                 if(getCategory_string() == null){
+                                    // 카테고리 선택 안했을 때
                                     Toast.makeText(getActivity(),"카테고리를 선택해",Toast.LENGTH_SHORT).show();
                                 }else{
+                                    // 모든 선택을 다 했을 때
 
                                     // 생성 버튼 누르는 순간 좌표값을 받아온다.(homeFragment로 부터)
                                     setLatitude(getArguments().getDouble("latitude"));
                                     setLongitude(getArguments().getDouble("longitude"));
 
                                     //결과값 toast로 확인
-                                    Toast.makeText(getActivity(),getCreate_name_variable() + "," + getCreate_person_num_variable() + ","+
-                                            getCreate_for_friend_variable()+"\n"+getDate_year()+ ","+ getDate_month()+","
-                                            +getDate_day() + "," + getCategory_string()+
-                                            "," + getLatitude() + "," +
-                                            getLongitude(),Toast.LENGTH_LONG).show();
-
-                                    // 날짜 초기화
-                                    setDate_day(0);
-                                    setDate_month(0);
-                                    setDate_year(0);
-
-                                    // 모든 값 초기화
-                                    create_name_edit_text.setText(null);
-                                    create_person_num_edit_text.setText(null);
-                                    create_for_friend_edit_text.setText(null);
-                                    setCategory_string(null);
+//                                    Toast.makeText(getActivity(),getCreate_name_variable() + "," + getCreate_person_num_variable() + ","+
+//                                            getCreate_for_friend_variable()+"\n"+getDate_year()+ ","+ getDate_month()+","
+//                                            +getDate_day() + "," + getCategory_string()+
+//                                            "," + getLatitude() + "," +
+//                                            getLongitude(),Toast.LENGTH_LONG).show();
 
 
                                     //MakeDatabase에 저장.
@@ -186,6 +179,24 @@ public class HomeFloatingFragment extends Fragment {
                                     database.setLatitude(getLatitude());
                                     database.setLongitude(getLongitude());
 
+                                    // 날짜 초기화
+                                    setDate_day(0);
+                                    setDate_month(0);
+                                    setDate_year(0);
+
+                                    // 모든 값 초기화
+                                    create_name_edit_text.setText(null);
+                                    create_person_num_edit_text.setText(null);
+                                    create_for_friend_edit_text.setText(null);
+                                    setCategory_string(null);
+
+                                    // database에 잘 들어갔는지 확인
+                                    Toast.makeText(getActivity(),database.getMeeting_name() + "," + database.getMeeting_person() + ","+
+                                            database.getText_for_meeting_frient()+"\n"+database.getYear()+ ","+ database.getMonth()+","
+                                            +database.getDay() + "," + database.getMeeting_category()+
+                                            "," + database.getLatitude() + "," +
+                                            database.getLongitude(),Toast.LENGTH_LONG).show();
+
                                     // 플러스 버튼 fragment 종료
                                     FragmentManager fm = getParentFragmentManager();
                                     fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
@@ -196,6 +207,7 @@ public class HomeFloatingFragment extends Fragment {
                 }
             }
         });
+
 
 
         // 취소 버튼
@@ -303,13 +315,11 @@ public class HomeFloatingFragment extends Fragment {
 
                         //1월은 0부터 시작하기 때문에 +1을 해준다.
                         month = month + 1;
-                        String date = year + "/" + month + "/" + day;
+                        String date = year + "." + month + "." + day;
 
                         setDate_year(year);
                         setDate_month(month);
                         setDate_day(day);
-
-                        date_day = day;
 
                         dateText.setText(date);
                     }
