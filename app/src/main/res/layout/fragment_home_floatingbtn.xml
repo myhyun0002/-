@@ -10,6 +10,7 @@
     android:orientation="vertical"
     android:background="@drawable/alert_white_border"
     tools:ignore="ExtraText"
+    android:id="@+id/fragment_home_floating_btn"
     >
 
     <!--android:background="@drawable/blackline"-->
@@ -29,23 +30,6 @@
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/create_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="68dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="18dp"
-        android:text="카테고리"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -129,15 +113,16 @@
         android:inputType="numberSigned"
         android:textSize="18dp" />
 
-    <Button
-        android:id="@+id/date"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/date_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="47dp"
         android:layout_marginTop="193dp"
-        android:backgroundTint="#A9A9A9"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/category_btn"
         android:text="날짜 선택" />
 
     <TextView
@@ -152,5 +137,30 @@
         android:text=""
         android:textColor="@color/black"
         android:textSize="18dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/category_btn"
+        android:layout_width="206dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/category_btn"
+        android:backgroundTint="@color/white"
+        android:text="카테고리" />
+
+    <ListView
+        android:id="@+id/category_list"
+        android:layout_width="203dp"
+        android:layout_height="222dp"
+        android:layout_below="@id/category_btn"
+        android:layout_alignStart="@id/category_btn"
+        android:layout_alignLeft="@id/category_btn"
+        android:layout_alignRight="@id/category_btn"
+        android:layout_marginStart="3dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="50dp" />
 
 </RelativeLayout>

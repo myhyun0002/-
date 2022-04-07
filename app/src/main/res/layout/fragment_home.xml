@@ -73,7 +73,6 @@
         android:outlineSpotShadowColor="@color/black"
         android:scaleType="fitXY"
         android:src="@drawable/ic_gps"
-
         android:background="@drawable/homefragment_gps_button"
         android:requiresFadingEdge="vertical"/>
 
