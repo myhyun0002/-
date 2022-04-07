@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private ChattingFragment chattingFragment;
     private UserFragment userFragment;
-    private HomeFloatingFragment homeFlaotingActionFragment;
+    private HomeFloatingFragment homeFloatingFragment;
 
     private FragmentActivity myContext;
     FloatingActionButton fab;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
-
+        homeFloatingFragment = new HomeFloatingFragment();
         // 위치 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             bundle.putDouble("latitude", latitude );
                             bundle.putDouble("longitude", longitude );
                             homeFragment.setArguments(bundle);
+                            homeFloatingFragment.setArguments(bundle);
                         }
                     }
                 });

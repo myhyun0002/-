@@ -123,7 +123,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
                 } else {
                     //if the fragment does not exist, add it to fragment manager.
-                    fm.beginTransaction().add(R.id.homeFragmentFrame, homeFlaotingActionFragment, "homefloatingbtn").commit();
+                    //fm.beginTransaction().add(R.id.homeFragmentFrame, homeFlaotingActionFragment, "homefloatingbtn").commit();
+
+                    Bundle bundle = new Bundle(2); // 번들을 통해 값 전달
+                    bundle.putDouble("latitude",getLatitude());//번들에 넘길 값 저장
+                    bundle.putDouble("longitude",getLongitude());//번들에 넘길 값 저장
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    HomeFloatingFragment homeFloatingFragment = new HomeFloatingFragment();//프래그먼트2 선언
+                    homeFloatingFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
+                    transaction.add(R.id.homeFragmentFrame, homeFloatingFragment);
+                    transaction.commit();
+
                 }
             }
         });
