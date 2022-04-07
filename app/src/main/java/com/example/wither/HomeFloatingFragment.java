@@ -3,6 +3,7 @@ package com.example.wither;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -160,7 +161,6 @@ public class HomeFloatingFragment extends Fragment {
                                     create_for_friend_edit_text.setText(null);
                                     setCategory_string(null);
                                 }
-
                             }
                         }
                     }
@@ -187,8 +187,18 @@ public class HomeFloatingFragment extends Fragment {
         ListView category_list_view = (ListView)view.findViewById(R.id.category_list);
         category_list_view.setVisibility(view.INVISIBLE);
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, category_list);
+                android.R.layout.simple_list_item_1, category_list){
 
+            // list text color -> black
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View view = super.getView(position, convertView, parent);
+                TextView tv = (TextView) view.findViewById(android.R.id.text1);
+                tv.setTextColor(Color.BLACK);
+                return view;
+            }
+        };
         category_list_view.setAdapter(listViewAdapter);
 
 

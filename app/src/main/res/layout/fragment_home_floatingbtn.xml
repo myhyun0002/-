@@ -27,6 +27,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:hint="모임이름"
+        android:textColorHint="#808080"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textSize="18dp"
@@ -46,6 +47,8 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:hint="친구에게 한마디"
+        android:textColorHint="#808080"
+        android:textColor="@color/black"
         android:textSize="18dp" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -111,6 +114,9 @@
         android:ems="10"
         android:gravity="right"
         android:inputType="numberSigned"
+        android:hint="1"
+        android:textColorHint="#808080"
+        android:textColor="@color/black"
         android:textSize="18dp" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -123,6 +129,7 @@
         android:layout_marginTop="193dp"
         android:backgroundTint="@color/white"
         android:background="@drawable/category_btn"
+        android:textColor="@color/black"
         android:text="날짜 선택" />
 
     <TextView
@@ -149,7 +156,8 @@
         android:layout_marginTop="72dp"
         android:background="@drawable/category_btn"
         android:backgroundTint="@color/white"
-        android:text="카테고리" />
+        android:text="카테고리"
+        android:textColor="@color/black"/>
 
     <ListView
         android:id="@+id/category_list"
@@ -161,6 +169,8 @@
         android:layout_alignRight="@id/category_btn"
         android:layout_marginStart="3dp"
         android:layout_marginRight="0dp"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/black"
+        />
 
 </RelativeLayout>
