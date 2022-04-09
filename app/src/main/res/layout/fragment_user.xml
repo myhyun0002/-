@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,10 +9,73 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="100dp"
+        android:layout_height="94dp" /> <!-- 프로필 이미지-->
+
     <TextView
+        android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="user 화면 입니다"
-        android:textSize="40sp"/>
+        android:paddingTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="NICKNAME"
+        android:textSize="40sp" />
 
-</LinearLayout>
+    <TextView
+
+        android:id="@+id/text2"
+        android:layout_width="257dp"
+        android:layout_height="125dp"
+        android:layout_below="@id/text1"
+        android:layout_alignLeft="@id/text1"
+        android:layout_centerInParent="true"
+        android:background="#FF9800"
+        android:text="자기소개란"
+        android:textSize="50sp" />
+
+    <Button
+        android:id="@+id/make"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text2"
+        android:text="생성" />
+
+    <Button
+        android:id="@+id/join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text2"
+        android:layout_toRightOf="@id/make"
+        android:text="참여" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/category"
+        android:text="선호 카테고리 변경  >"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/category"
+        android:id="@+id/privat"
+        android:text="개인 정보 변경  >"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/privat"
+        android:id="@+id/report"
+        android:text="사용자 신고  >"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/report"
+        android:id="@+id/settings"
+        android:text="시스템 설정  >"/>
+
+
+
+</RelativeLayout>
