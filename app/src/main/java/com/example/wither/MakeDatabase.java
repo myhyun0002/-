@@ -1,6 +1,12 @@
 package com.example.wither;
 
-public class MakeDatabase {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class MakeDatabase implements Parcelable {
     // 9개 정보
     private double latitude;
     private double longitude;
@@ -11,6 +17,7 @@ public class MakeDatabase {
     private int month;
     private int day;
     private String text_for_meeting_frient;
+    private ArrayList<MakeDatabase> arrayList;
 
 //    MakeDatabase(double latitude,
 //            double longitude,
@@ -31,6 +38,33 @@ public class MakeDatabase {
 //        setMeeting_person(meeting_person);
 //        setMeeting_category(meeting_category);
 //    }
+    MakeDatabase(){
+
+    }
+
+    protected MakeDatabase(Parcel in) {
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        meeting_name = in.readString();
+        meeting_category = in.readString();
+        meeting_person = in.readInt();
+        year = in.readInt();
+        month = in.readInt();
+        day = in.readInt();
+        text_for_meeting_frient = in.readString();
+    }
+
+    public static final Creator<MakeDatabase> CREATOR = new Creator<MakeDatabase>() {
+        @Override
+        public MakeDatabase createFromParcel(Parcel in) {
+            return new MakeDatabase(in);
+        }
+
+        @Override
+        public MakeDatabase[] newArray(int size) {
+            return new MakeDatabase[size];
+        }
+    };
 
     public double getLatitude() {
         return latitude;
@@ -102,5 +136,35 @@ public class MakeDatabase {
 
     public void setText_for_meeting_frient(String text_for_meeting_frient) {
         this.text_for_meeting_frient = text_for_meeting_frient;
+    }
+
+    public void addArrayLIst(MakeDatabase database){
+        getArrayList().add(database);
+    }
+
+    public ArrayList<MakeDatabase> getArrayList() {
+        return arrayList;
+    }
+
+    public void setArrayList(ArrayList<MakeDatabase> arrayList) {
+        this.arrayList = arrayList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeString(meeting_name);
+        parcel.writeString(meeting_category);
+        parcel.writeInt(meeting_person);
+        parcel.writeInt(year);
+        parcel.writeInt(month);
+        parcel.writeInt(day);
+        parcel.writeString(text_for_meeting_frient);
     }
 }

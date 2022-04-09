@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,28 +24,36 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class HomeFloatingFragment extends Fragment {
+public class HomeFloatingFragment extends Fragment implements Serializable {
 
+    // 데이터베이스에 저장
     MakeDatabase database = new MakeDatabase();
 
+    //실시간 데이터 주고 받기(homeFragment와 homeFloatingFragment)
+    private SharedViewModel sharedViewModel;
+
+
     // fragment에서 context를 쓸려면 getActivity()
-    HomeFragment homeFragment = new HomeFragment();
 
     // 키보드 조작
     private InputMethodManager keyboardDown;
@@ -191,15 +201,20 @@ public class HomeFloatingFragment extends Fragment {
                                     setCategory_string(null);
 
                                     // database에 잘 들어갔는지 확인
-                                    Toast.makeText(getActivity(),database.getMeeting_name() + "," + database.getMeeting_person() + ","+
-                                            database.getText_for_meeting_frient()+"\n"+database.getYear()+ ","+ database.getMonth()+","
-                                            +database.getDay() + "," + database.getMeeting_category()+
-                                            "," + database.getLatitude() + "," +
-                                            database.getLongitude(),Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(getActivity(),database.getMeeting_name() + "," + database.getMeeting_person() + ","+
+//                                            database.getText_for_meeting_frient()+"\n"+database.getYear()+ ","+ database.getMonth()+","
+//                                            +database.getDay() + "," + database.getMeeting_category()+
+//                                            "," + database.getLatitude() + "," +
+//                                            database.getLongitude(),Toast.LENGTH_LONG).show();
 
                                     // 플러스 버튼 fragment 종료
                                     FragmentManager fm = getParentFragmentManager();
                                     fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
+
+                                    HomeFragment homeFragment = new HomeFragment();
+
+                                    // homeFragment로 database 객체 데이터 전송
+                                    sharedViewModel.setLiveData(database);
                                 }
                             }
                         }
@@ -301,10 +316,18 @@ public class HomeFloatingFragment extends Fragment {
             }
         });
 
-
         return view;
 
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+    }
+
     void showDate() {
         //오늘 날짜(년,월,일) 변수에 담기
 
@@ -447,4 +470,5 @@ public class HomeFloatingFragment extends Fragment {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
 }
