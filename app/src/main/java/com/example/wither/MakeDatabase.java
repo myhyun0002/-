@@ -17,6 +17,7 @@ public class MakeDatabase implements Parcelable {
     private int month;
     private int day;
     private String text_for_meeting_frient;
+    private int resourceID;
     private ArrayList<MakeDatabase> arrayList;
 
 //    MakeDatabase(double latitude,
@@ -52,6 +53,7 @@ public class MakeDatabase implements Parcelable {
         month = in.readInt();
         day = in.readInt();
         text_for_meeting_frient = in.readString();
+        resourceID = in.readInt();
     }
 
     public static final Creator<MakeDatabase> CREATOR = new Creator<MakeDatabase>() {
@@ -155,6 +157,14 @@ public class MakeDatabase implements Parcelable {
         return 0;
     }
 
+    public int getResourceID() {
+        return resourceID;
+    }
+
+    public void setResourceID(int resourceID) {
+        this.resourceID = resourceID;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeDouble(latitude);
@@ -166,5 +176,28 @@ public class MakeDatabase implements Parcelable {
         parcel.writeInt(month);
         parcel.writeInt(day);
         parcel.writeString(text_for_meeting_frient);
+        parcel.writeInt(resourceID);
+    }
+
+    public int setMarkerIcon(String meeting_category){
+        if(meeting_category == "축구"){
+            return(R.drawable.category_ic_football);
+        }else if(meeting_category == "넷플릭스"){
+            return(R.drawable.category_ic_netflix);
+        }else if(meeting_category == "담배"){
+            return(R.drawable.category_ic_cigarette);
+        }else if(meeting_category == "공부"){
+            return(R.drawable.category_ic_study);
+        }else if(meeting_category == "야구"){
+            return(R.drawable.category_ic_baseball);
+        }else if(meeting_category == "카페"){
+            return(R.drawable.category_ic_cafe);
+        }else if(meeting_category == "영화"){
+            return(R.drawable.category_ic_movie);
+        }else if(meeting_category == "여행"){
+            return(R.drawable.category_ic_travel);
+        }
+
+        return 0;
     }
 }

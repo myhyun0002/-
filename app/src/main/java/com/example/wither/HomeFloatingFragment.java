@@ -188,7 +188,7 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     database.setText_for_meeting_frient(getCreate_for_friend_variable());
                                     database.setLatitude(getLatitude());
                                     database.setLongitude(getLongitude());
-
+                                    database.setResourceID(database.setMarkerIcon(getCategory_string()));
                                     // 날짜 초기화
                                     setDate_day(0);
                                     setDate_month(0);
@@ -355,10 +355,10 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
         category_list.add("넷플릭스");
         category_list.add("담배");
         category_list.add("공부");
-        category_list.add("취미1");
-        category_list.add("취미2");
-        category_list.add("취미3");
-        category_list.add("취미4");
+        category_list.add("야구");
+        category_list.add("카페");
+        category_list.add("영화");
+        category_list.add("여행");
     }
 
     private void hideKeyboard()

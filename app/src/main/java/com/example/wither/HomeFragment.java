@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
@@ -163,11 +164,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onChanged(MakeDatabase database) {
                 setDatabase(database);
-                if(database.getMeeting_person() == 3){
-                    setCategoryMarker(database,R.drawable.ic_home);
-                }else{
-                    setCategoryMarker(database,R.drawable.ic_gps);
-                }
+                setCategoryMarker(database);
 
                 Toast.makeText(getActivity(),database.getMeeting_name()+"",Toast.LENGTH_SHORT).show();
             }
@@ -215,21 +212,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private void setUserMarker(double lat, double lng){
         LocationOverlay locationOverlay = mNaverMap.getLocationOverlay();
-        locationOverlay.setIconHeight(60);
-        locationOverlay.setIconWidth(60);
-        locationOverlay.setCircleRadius(100);
+        locationOverlay.setIconHeight(70);
+        locationOverlay.setIconWidth(70);
+        locationOverlay.setCircleRadius(50);
+//        locationOverlay.setCircleOutlineWidth(1);
+        locationOverlay.setCircleOutlineColor(Color.rgb(12,144,255));
         locationOverlay.setPosition(new LatLng(lat, lng));
         locationOverlay.setVisible(true);
     }
 
 
-    private void setCategoryMarker(MakeDatabase makeDatabase, int resourceID)
+    private void setCategoryMarker(MakeDatabase makeDatabase)
     {
         Marker marker = new Marker();
         //아이콘 지정
-        marker.setIcon(OverlayImage.fromResource(resourceID));
+        marker.setIcon(OverlayImage.fromResource(makeDatabase.getResourceID()));
         //마커 위치
-        marker.setPosition(new LatLng(database.getLatitude(), database.getLongitude()));
+        marker.setPosition(new LatLng(makeDatabase.getLatitude(), makeDatabase.getLongitude()));
         //마커 표시
         marker.setWidth(70);
         marker.setHeight(70);
