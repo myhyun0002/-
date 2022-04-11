@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         //backKeyHandler.onBackPressed();
         //backKeyHandler.onBackPressed("\'뒤로\' 버튼을 두 번 누르면 종료됩니다.\n입력한 내용이 지워집니다.");
         //backKeyHandler.onBackPressed(5);
-        backKeyHandler.onBackPressed("5초 내로 '뒤로' 버튼을 한번 더 누르면, 앱이 종료됩니다 ", 5);
+        backKeyHandler.onBackPressed("\'뒤로\' 버튼을 한번 더 누르면,\n앱이 종료됩니다 ", 5);
     }
 
 
