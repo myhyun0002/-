@@ -21,7 +21,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,6 +38,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
+    //채팅앱안에서 채팅 들어가는 버튼 만들기
+    Button btn1, btn2;
 
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -66,6 +70,30 @@ public class MainActivity extends AppCompatActivity {
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
+        //채팅 안에서 채팅방으로 들어갈 수 있는 버튼 생성하기
+        btn1 = (Button)findViewById(R.id.btn_1);
+        btn2 = (Button)findViewById(R.id.btn_2);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                Fragment_person1 fragmentPerson1 = new Fragment_person1();
+                transaction.replace(R.id.frame, fragmentPerson1);
+                transaction.commit();
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                Fragment_person2 fragmentPerson2 = new Fragment_person2();
+                transaction.replace(R.id.frame, fragmentPerson2);
+                transaction.commit();
+            }
+        });
+
         // 위치 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
@@ -415,3 +443,4 @@ public class MainActivity extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }
+
