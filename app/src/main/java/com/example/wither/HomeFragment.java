@@ -38,9 +38,11 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
 
+import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
@@ -69,8 +71,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     // 데이터베이스 값 저장
     private MakeDatabase database;
 
-    // 사용자 위치
-    //
+    // 마커
+    private InfoWindow infoWindow3 = new InfoWindow();
+
 
     public HomeFragment() {
 
@@ -114,7 +117,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 //        TextView textView = (TextView)view.findViewById(R.id.textView);
 //        textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude()+"\n" + count);
-
 
         // 다른 탭으로 이동 후에 다시 돌아와도 지도 초기화 안되게 하는 코드
         MapView mapView;
@@ -164,7 +166,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onChanged(MakeDatabase database) {
                 setDatabase(database);
-                setCategoryMarker(database);
+                Marker marker = new Marker();
+                setCategoryMarker(marker,database);
+
+                marker.setOnClickListener(new Overlay.OnClickListener()
+                {
+                    @Override
+                    public boolean onClick(@NonNull Overlay overlay)
+                    {
+                        ViewGroup rootView = (ViewGroup)view.findViewById(R.id.homeFragmentFrame);
+                        MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
+
+                        adapter.setDatabase(database);
+                        infoWindow3.setAdapter(adapter);
+
+                        //인포창의 우선순위
+                        infoWindow3.setZIndex(10);
+                        //투명도 조정
+                        infoWindow3.setAlpha(0.9f);
+                        //인포창 표시
+                        infoWindow3.open(marker);
+                        return false;
+                    }
+                });
 
                 Toast.makeText(getActivity(),database.getMeeting_name()+"",Toast.LENGTH_SHORT).show();
             }
@@ -222,16 +246,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void setCategoryMarker(MakeDatabase makeDatabase)
+    private void setCategoryMarker(Marker marker,MakeDatabase makeDatabase)
     {
-        Marker marker = new Marker();
+
         //아이콘 지정
         marker.setIcon(OverlayImage.fromResource(makeDatabase.getResourceID()));
         //마커 위치
         marker.setPosition(new LatLng(makeDatabase.getLatitude(), makeDatabase.getLongitude()));
         //마커 표시
-        marker.setWidth(70);
-        marker.setHeight(70);
+        marker.setWidth(50);
+        marker.setHeight(50);
         marker.setMap(mNaverMap);
     }
 
