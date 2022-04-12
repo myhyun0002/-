@@ -21,7 +21,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,6 +38,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
 
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
+
         // 위치 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
@@ -228,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         //backKeyHandler.onBackPressed();
         //backKeyHandler.onBackPressed("\'뒤로\' 버튼을 두 번 누르면 종료됩니다.\n입력한 내용이 지워집니다.");
         //backKeyHandler.onBackPressed(5);
-        backKeyHandler.onBackPressed("5초 내로 '뒤로' 버튼을 한번 더 누르면, 앱이 종료됩니다 ", 5);
+        backKeyHandler.onBackPressed("\'뒤로\' 버튼을 한번 더 누르면,\n앱이 종료됩니다 ", 5);
     }
 
 
@@ -415,3 +418,4 @@ public class MainActivity extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }
+
