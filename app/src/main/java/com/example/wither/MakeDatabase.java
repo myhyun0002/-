@@ -3,6 +3,9 @@ package com.example.wither;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.naver.maps.map.overlay.InfoWindow;
+import com.naver.maps.map.overlay.Marker;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -18,27 +21,11 @@ public class MakeDatabase implements Parcelable {
     private int day;
     private String text_for_meeting_frient;
     private int resourceID;
-    private ArrayList<MakeDatabase> arrayList;
 
-//    MakeDatabase(double latitude,
-//            double longitude,
-//            String meeting_name,
-//            String meeting_category,
-//            int meeting_person,
-//            int year,
-//            int month,
-//            int day,
-//            String text_for_meeting_frient){
-//        setMeeting_name(meeting_name);
-//        setLongitude(longitude);
-//        setLatitude(latitude);
-//        setText_for_meeting_frient(text_for_meeting_frient);
-//        setYear(year);
-//        setMonth(month);
-//        setDay(day);
-//        setMeeting_person(meeting_person);
-//        setMeeting_category(meeting_category);
-//    }
+    // marker 객체 저장
+    Marker marker;
+    InfoWindow infoWindow;
+
     MakeDatabase(){
 
     }
@@ -140,18 +127,6 @@ public class MakeDatabase implements Parcelable {
         this.text_for_meeting_frient = text_for_meeting_frient;
     }
 
-    public void addArrayLIst(MakeDatabase database){
-        getArrayList().add(database);
-    }
-
-    public ArrayList<MakeDatabase> getArrayList() {
-        return arrayList;
-    }
-
-    public void setArrayList(ArrayList<MakeDatabase> arrayList) {
-        this.arrayList = arrayList;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -163,6 +138,22 @@ public class MakeDatabase implements Parcelable {
 
     public void setResourceID(int resourceID) {
         this.resourceID = resourceID;
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
+    }
+
+    public InfoWindow getInfoWindow() {
+        return infoWindow;
+    }
+
+    public void setInfoWindow(InfoWindow infoWindow) {
+        this.infoWindow = infoWindow;
     }
 
     @Override

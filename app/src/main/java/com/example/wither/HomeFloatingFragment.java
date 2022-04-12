@@ -36,6 +36,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.naver.maps.map.overlay.InfoWindow;
+import com.naver.maps.map.overlay.Marker;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -85,6 +87,10 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
     // mainactivity에서 위도 경도 받아오기
     private double latitude, longitude;
+
+    // 마커와 마커에 해당 정보창 띄우기 위해 필요한 객체
+    Marker marker;
+    InfoWindow infoWindow;
 
     public HomeFloatingFragment() {
 
@@ -169,14 +175,8 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     // 생성 버튼 누르는 순간 좌표값을 받아온다.(homeFragment로 부터)
                                     setLatitude(getArguments().getDouble("latitude"));
                                     setLongitude(getArguments().getDouble("longitude"));
-
-                                    //결과값 toast로 확인
-//                                    Toast.makeText(getActivity(),getCreate_name_variable() + "," + getCreate_person_num_variable() + ","+
-//                                            getCreate_for_friend_variable()+"\n"+getDate_year()+ ","+ getDate_month()+","
-//                                            +getDate_day() + "," + getCategory_string()+
-//                                            "," + getLatitude() + "," +
-//                                            getLongitude(),Toast.LENGTH_LONG).show();
-
+                                    marker = new Marker();
+                                    infoWindow = new InfoWindow();
 
                                     //MakeDatabase에 저장.
                                     database.setMeeting_name(getCreate_name_variable());
@@ -189,6 +189,9 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     database.setLatitude(getLatitude());
                                     database.setLongitude(getLongitude());
                                     database.setResourceID(database.setMarkerIcon(getCategory_string()));
+                                    database.setMarker(marker);
+                                    database.setInfoWindow(infoWindow);
+
                                     // 날짜 초기화
                                     setDate_day(0);
                                     setDate_month(0);

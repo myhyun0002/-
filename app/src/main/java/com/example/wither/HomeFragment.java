@@ -30,6 +30,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 
 import com.naver.maps.map.MapView;
@@ -46,11 +47,13 @@ import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Vector;
 
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
-
+//,Overlay.OnClickListener
     FragmentActivity mcontext;
 
     // 실시간 데이터 주고 받기
@@ -69,11 +72,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private FragmentActivity myContext;
 
     // 데이터베이스 값 저장
-    private MakeDatabase database;
+//    private MakeDatabase database;
 
     // 마커
-    private InfoWindow infoWindow3 = new InfoWindow();
+    ArrayList<Marker> markers = new ArrayList<Marker>();
+    ArrayList<InfoWindow> infoWindows = new ArrayList<InfoWindow>();
+    ArrayList<MakeDatabase> databases = new ArrayList<MakeDatabase>();
 
+    private InfoWindow infoWindow = new InfoWindow();
+
+    static int count = 1;
 
     public HomeFragment() {
 
@@ -161,38 +169,39 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<MakeDatabase>() {
             @Override
             public void onChanged(MakeDatabase database) {
-                setDatabase(database);
-                Marker marker = new Marker();
-                setCategoryMarker(marker,database);
-
-                marker.setOnClickListener(new Overlay.OnClickListener()
-                {
-                    @Override
-                    public boolean onClick(@NonNull Overlay overlay)
-                    {
-                        ViewGroup rootView = (ViewGroup)view.findViewById(R.id.homeFragmentFrame);
-                        MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
-
-                        adapter.setDatabase(database);
-                        infoWindow3.setAdapter(adapter);
-
-                        //인포창의 우선순위
-                        infoWindow3.setZIndex(10);
-                        //투명도 조정
-                        infoWindow3.setAlpha(0.9f);
-                        //인포창 표시
-                        infoWindow3.open(marker);
-                        return false;
-                    }
-                });
-
-                Toast.makeText(getActivity(),database.getMeeting_name()+"",Toast.LENGTH_SHORT).show();
+                setCategoryMarker(database.getMarker(), database);
+                databases.add(database);
+                markers.add(database.getMarker());
+                infoWindows.add(database.getInfoWindow());
             }
         });
+
+        // 정보창 화면 꾸미기
+        infoWindow.setAdapter(new InfoWindow.ViewAdapter() {
+            @NonNull
+            @Override
+            public View getView(@NonNull InfoWindow infoWindow) {
+                ViewGroup rootView = (ViewGroup)view.findViewById(R.id.homeFragmentFrame);
+                MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
+
+                // 터치한 마커를 찾는 for문 (infoWindow.getMarker()는 터치한 해당 marker다)
+                // for문으로 database에 해당 마커를 찾고 그 마커를 포함한 데이터베이스의 정보를 가지고 온다.
+                for(int i = 0 ; i < databases.size();i++){
+                    if(databases.get(i).getMarker() == infoWindow.getMarker()){
+                        adapter.setDatabase(databases.get(i));
+                        break;
+                    }
+                }
+
+                return (View)adapter.getContentView(infoWindow);
+            }
+        });
+
     }
 
     // 지도 마커 표시를 위한 메서드
@@ -202,8 +211,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // NaverMap 객체 받아서 NaverMap 객체에 위치 소스 지정
         mNaverMap = naverMap;
         mNaverMap.setLocationSource(mLocationSource);
-
-//        this.requestPermissions(PERMISSIONS, PERMISSION_REQUEST_CODE);
 
         Bundle bundle = getArguments();
 
@@ -216,7 +223,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
             CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
             mNaverMap.moveCamera(cameraUpdate);
-
         }
 
         // 현위치 버튼 , zoom버튼 생성
@@ -232,7 +238,62 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(false);
         uiSettings.setRotateGesturesEnabled(false);
         uiSettings.setScaleBarEnabled(false);
+
+
+        // 화면 내의 마커만 표시하는 코드(미완성)- onMapReady안의 코드
+
+//        naverMap.addOnCameraChangeListener(new NaverMap.OnCameraChangeListener() {
+//            @Override
+//            public void onCameraChange(int reason, boolean animated) {
+//                freeActiveMarkers();
+//                // 정의된 마커위치들중 가시거리 내에있는것들만 마커 생성
+//                LatLng currentPosition = getCurrentPosition(naverMap);
+//                for (LatLng markerPosition: markersPosition) {
+//                    if (!withinSightMarker(currentPosition, markerPosition))
+//                        continue;
+//                    Marker marker = new Marker();
+//                    marker.setPosition(markerPosition);
+//                    marker.setMap(naverMap);
+//                    activeMarkers.add(marker);
+//                }
+//            }
+//        });
     }
+
+    // 화면 내의 마커만 보여주는 메서드
+
+//    // 현재 카메라가 보고있는 위치
+//    public LatLng getCurrentPosition(NaverMap naverMap) {
+//        CameraPosition cameraPosition = naverMap.getCameraPosition();
+//        return new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+//    }
+//
+//    // 마커 정보 저장시킬 변수들 선언
+//    private Vector<LatLng> markersPosition;
+//    private Vector<Marker> activeMarkers;
+//
+//    // 3km 가시거리 안에 마커만 지도에 표시
+//    public final static double REFERANCE_LAT = 1 / 109.958489129649955;
+//    public final static double REFERANCE_LNG = 1 / 88.74;
+//    public final static double REFERANCE_LAT_X3 = 3 / 109.958489129649955;
+//    public final static double REFERANCE_LNG_X3 = 3 / 88.74;
+//    public boolean withinSightMarker(LatLng currentPosition, LatLng markerPosition) {
+//        boolean withinSightMarkerLat = Math.abs(currentPosition.latitude - markerPosition.latitude) <= REFERANCE_LAT_X3;
+//        boolean withinSightMarkerLng = Math.abs(currentPosition.longitude - markerPosition.longitude) <= REFERANCE_LNG_X3;
+//        return withinSightMarkerLat && withinSightMarkerLng;
+//    }
+//
+//    private void freeActiveMarkers() {
+//        if (activeMarkers == null) {
+//            activeMarkers = new Vector<Marker>();
+//            return;
+//        }
+//        for (Marker activeMarker: activeMarkers) {
+//            activeMarker.setMap(null);
+//        }
+//        activeMarkers = new Vector<Marker>();
+//    }
+
 
     private void setUserMarker(double lat, double lng){
         LocationOverlay locationOverlay = mNaverMap.getLocationOverlay();
@@ -245,10 +306,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationOverlay.setVisible(true);
     }
 
-
     private void setCategoryMarker(Marker marker,MakeDatabase makeDatabase)
     {
-
+        ViewGroup rootView = (ViewGroup)getView().findViewById(R.id.homeFragmentFrame);
+        MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
+//        marker.set
         //아이콘 지정
         marker.setIcon(OverlayImage.fromResource(makeDatabase.getResourceID()));
         //마커 위치
@@ -256,15 +318,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //마커 표시
         marker.setWidth(50);
         marker.setHeight(50);
+        marker.setAnchor(new PointF(count, 2));
+        marker.setHideCollidedCaptions(true);
         marker.setMap(mNaverMap);
+
+        // 마커에 정보창 띄울 수 있는 권한을 부여
+        // 마커를 누르면 정보창을 띄우게 해줌
+        marker.setOnClickListener(overlay -> {
+
+            infoWindow.setZIndex(5);
+                //투명도 조정
+            infoWindow.setAlpha(0.9f);
+            infoWindow.open(marker);
+            return true;
+        });
+
+
+        count /= 2;
     }
-
-//    @Override
-//    public void setArguments(@NonNull Bundle args) {
-//        assert args != null;
-//        MakeDatabase database = (MakeDatabase) args.getSerializable("database");
-//    }
-
 
     public double getLatitude(){
         return latitude;
@@ -282,27 +353,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         this.longitude = longitude;
     }
 
-    public void setDatabase(MakeDatabase database) {
-        this.database = database;
-    }
 }
 
-//    MapFragment mapFragment = (MapFragment) fm.findFragmentById(R.id.map_fragment);
-//        if (mapFragment == null) {
-//            mapFragment = MapFragment.newInstance();
-//            fm.beginTransaction().add(R.id.map_fragment, mapFragment).commit();
-//        }
-//        mapFragment.onDestroy();
-//
-//        mapFragment.getMapAsync(this);
-//locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-//사용자의 현재 위치
-
-//mLocationSource = new FusedLocationSource(this, PERMISSION_REQUEST_CODE);
-
-
-
-//TextView textView = (TextView)view.findViewById(R.id.textView);
-//textView.setText("위도는 " + latitude + "\n 경도는 " + longitude);
 
 
