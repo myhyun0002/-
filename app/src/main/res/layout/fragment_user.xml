@@ -10,10 +10,15 @@
     <!-- TODO: Update blank fragment layout -->
 
 
+    <!-- 프로필 이미지-->
+
     <ImageView
         android:id="@+id/profile"
         android:layout_width="100dp"
-        android:layout_height="94dp" /> <!-- 프로필 이미지-->
+        android:layout_height="94dp"
+        android:layout_toleftOf="@id/text1"
+        android:layout_above="@id/make"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/text1"
@@ -69,13 +74,13 @@
         android:layout_below="@id/privat"
         android:id="@+id/report"
         android:text="사용자 신고  >"/>
+
     <Button
+        android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/report"
-        android:id="@+id/settings"
-        android:text="시스템 설정  >"/>
-
+        android:text="시스템 설정  >" />
 
 
 </RelativeLayout>

@@ -13,7 +13,6 @@
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/drawable/list_button_rectangle.xml" value="0.238" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/drawable/menu_selector_color.xml" value="0.1" />
-        <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/drawable/rounded_rectangle_sky_solid_button_shape.xml" value="0.2505" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/drawable/rounded_rectangle_solid.xml" value="0.248" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout-v28/fragment_home.xml" value="0.1078125" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/activity_main.xml" value="0.2" />
@@ -23,14 +22,18 @@
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_home_floatingbtn.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_user.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/item_pointer.xml" value="0.6" />
-        <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/marker_pointer.xml" value="0.4" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/menu/bottom_menu.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/menu/btm_navi_menu.xml" value="0.264" />
+        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat_person1.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat_person2.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_home.xml" value="0.25364583333333335" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_chat.xml" value="0.1546875" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_home.xml" value="0.1546875" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_home_floatingbtn.xml" value="0.23596014492753623" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_user.xml" value="0.4" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/user_category.xml" value="0.1546875" />
       </map>
     </option>
   </component>
