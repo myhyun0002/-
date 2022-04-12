@@ -3,34 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wither">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
+        android:appComponentFactory="@string/app_name"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wither"
         tools:replace="android:appComponentFactory"
-        android:appComponentFactory="@string/app_name"
         tools:targetApi="p">
-
-        <!--가로 모드 비활성화 : screenOrientation="portrait" -->
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/user_category" />
+        <!-- 가로 모드 비활성화 : screenOrientation="portrait" -->
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="wayunkrpqw" />
-
     </application>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
