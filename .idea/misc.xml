@@ -22,7 +22,6 @@
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_home_floatingbtn.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/fragment_user.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/layout/user_category.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/menu/bottom_menu.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Samsung/university/software_3_to_1/sanhak/app/src/main/res/menu/btm_navi_menu.xml" value="0.264" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat.xml" value="0.25364583333333335" />
@@ -32,6 +31,8 @@
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_inchat.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_user.xml" value="0.1125" />
+        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/marker_pointer.xml" value="0.1125" />
+        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/user_category.xml" value="0.1125" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_home_floatingbtn.xml" value="0.23596014492753623" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_user.xml" value="0.4" />
@@ -40,7 +41,6 @@
   </component>
   <component name="ProjectResources">
     <resource url="C:\Users\Samsung\university\software_3_to_1\sanhak" location="$PROJECT_DIR$" />
-    <resource url="http://schemas.android.com/apk/res/android" location="$PROJECT_DIR$" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
