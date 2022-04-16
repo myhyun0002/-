@@ -225,6 +225,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             mNaverMap.moveCamera(cameraUpdate);
         }
 
+
         // 현위치 버튼 , zoom버튼 생성
         UiSettings uiSettings = mNaverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(false);
