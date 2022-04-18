@@ -28,14 +28,16 @@
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat_person1.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_chat_person2.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_home.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_inchat.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/fragment_user.xml" value="0.1125" />
-        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/marker_pointer.xml" value="0.1125" />
-        <entry key="..\:/Users/home/AndroidStudioProjects/Practice/sanhak_wither/app/src/main/res/layout/user_category.xml" value="0.1125" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/cslayout2.xml" value="0.1" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_chat.xml" value="0.1546875" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_home.xml" value="0.1546875" />
         <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_home_floatingbtn.xml" value="0.23596014492753623" />
-        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_user.xml" value="0.4" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_inchat.xml" value="0.20969202898550723" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/fragment_user.xml" value="0.264" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/layout.xml" value="0.264" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/layout/user_category.xml" value="0.20701754385964913" />
+        <entry key="..\:/android-sdk/sanhak-temp/app/src/main/res/menu/search.xml" value="0.176" />
       </map>
     </option>
   </component>

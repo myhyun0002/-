@@ -8,7 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -20,9 +20,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -58,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
 
     // 두번 뒤로가기 눌렀을 때 앱 종료 자바 클래스
     private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
+// search 기능 진행중
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu,menu);
+//
+//        MenuItem menuItem = menu.findItem(R.id.action_search);
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
