@@ -334,21 +334,18 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
     void showDate() {
         //오늘 날짜(년,월,일) 변수에 담기
 
-        datePickerDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        datePickerDialog = new DatePickerDialog(getActivity(),R.style.DatePickerTheme,
+                (datePicker, year, month, day) -> {
 
-                        //1월은 0부터 시작하기 때문에 +1을 해준다.
-                        month = month + 1;
-                        String date = year + "." + month + "." + day;
+                    //1월은 0부터 시작하기 때문에 +1을 해준다.
+                    month = month + 1;
+                    String date = year + "." + month + "." + day;
 
-                        setDate_year(year);
-                        setDate_month(month);
-                        setDate_day(day);
+                    setDate_year(year);
+                    setDate_month(month);
+                    setDate_day(day);
 
-                        dateText.setText(date);
-                    }
+                    dateText.setText(date);
                 }, today_Year, today_Month,today_Day);
         datePickerDialog.show();
     }
