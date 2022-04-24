@@ -22,6 +22,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,9 +39,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    private double latitude,longitude;
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private double latitude, longitude;
 
     // fragment 변수 선언
     private HomeFragment homeFragment;
@@ -76,11 +85,27 @@ public class MainActivity extends AppCompatActivity {
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
+//리스트뷰
+        firstInit(); //객체 초기화 및 생성
+        addItem(); //아이템 리스트 추가
+
+        mListItemsAdapter = new ListItemsAdapter(getApplicationContext(), mItems); //어댑터 객체 생성
+        list_items.setAdapter(mListItemsAdapter); //리스트뷰에 어댑터 적용
+
+        //아이템 클릭했을 때 동작하는 클릭 리스너
+        list_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "position = "  + position + ", name=" + mItems.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         // 위치 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
-        }else {
+        } else {
             checkRunTimePermission();
         }
 
@@ -98,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
                             longitude = location.getLongitude();
 
                             Bundle bundle = new Bundle(2);
-                            bundle.putDouble("latitude", latitude );
-                            bundle.putDouble("longitude", longitude );
+                            bundle.putDouble("latitude", latitude);
+                            bundle.putDouble("longitude", longitude);
                             homeFragment.setArguments(bundle);
                             homeFloatingFragment.setArguments(bundle);
                         }
@@ -124,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
                 switch (item.getItemId()) {
-                    case R.id.action_home:  {
+                    case R.id.action_home: {
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //프래그먼트가 존재한다면 보여준다.
                             fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("home"))).commit();
@@ -142,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    case R.id.action_chat:  {
+                    case R.id.action_chat: {
 
                         if (fragmentManager.findFragmentByTag("chatting") != null) {
                             //if the fragment exists, show it.
@@ -161,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    case R.id.action_user:  {
+                    case R.id.action_user: {
 
                         if (fragmentManager.findFragmentByTag("user") != null) {
                             //if the fragment exists, show it.
@@ -180,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    default:return false;
+                    default:
+                        return false;
                 }
             }
         });
@@ -243,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     // 여기서부터는 gps 받아오는 코드
     @Override
     public void onRequestPermissionsResult(int permsRequestCode,
@@ -267,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if(check_result) {
+            if (check_result) {
 
                 //위치 값을 가져올 수 있음
                 ;
@@ -291,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void checkRunTimePermission(){
+    void checkRunTimePermission() {
 
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
@@ -334,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 경도 위도를 통한 도로명 주소 도출 메서드
-    public String getCurrentAddress( double latitude, double longitude) {
+    public String getCurrentAddress(double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -366,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Address address = addresses.get(0);
-        return address.getAddressLine(0).toString()+"\n";
+        return address.getAddressLine(0).toString() + "\n";
 
     }
 
@@ -425,5 +450,79 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+    private ListView list_items;
+    private ListItemsAdapter mListItemsAdapter;
+    private ArrayList<String> mItems;
+
+    public void firstInit(){
+        list_items = (ListView) findViewById(R.id.list_items);
+        mItems = new ArrayList<>();
+    }
+
+    public void addItem(){
+        mItems.add("item1");
+        mItems.add("item2");
+        mItems.add("item3");
+        mItems.add("item4");
+        mItems.add("item5");
+    }
 }
+
+    //ver2
+
+
+    //adapter class
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        ListView listView = findViewById(R.id.listView);
+//        CategoryAdapter adapter = new CategoryAdapter();
+//        adapter.addItem(new CategoryList("blackFish", "010-1000-1000", R.drawable.category_ic_cigarette));
+//        adapter.addItem(new CategoryList("redFish", "010-1000-1001", R.drawable.category_ic_baseball));
+//        listView.setAdapter(adapter);
+//
+//    }
+
+//    class CategoryAdapter extends BaseAdapter {
+//        ArrayList<CategoryList> items = new ArrayList<CategoryList>();
+//
+//        @Override
+//        public int getCount() {
+//            return items.size();
+//        }
+//
+//        public void addItem(CategoryList item){
+//            items.add(item);
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return items.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            CategoryListView categoryListView = null;
+//
+//            if (convertView == null) {
+//                categoryListView = new CategoryListView(getApplicationContext());
+//            } else {
+//                categoryListView = (CategoryListView) convertView;
+//            }
+//            CategoryList item = items.get(position);
+//            categoryListView.setName(item.getName());
+//            categoryListView.setMobile(item.getMobile());
+//            categoryListView.setImage(item.getResld());
+//            return categoryListView;
+//            }
+
+
+
 
