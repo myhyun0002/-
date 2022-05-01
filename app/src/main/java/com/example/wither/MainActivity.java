@@ -450,22 +450,22 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-    private ListView list_items;
-    private ListItemsAdapter mListItemsAdapter;
-    private ArrayList<String> mItems;
-
-    public void firstInit(){
-        list_items = (ListView) findViewById(R.id.list_items);
-        mItems = new ArrayList<>();
-    }
-
-    public void addItem(){
-        mItems.add("item1");
-        mItems.add("item2");
-        mItems.add("item3");
-        mItems.add("item4");
-        mItems.add("item5");
-    }
+//    private ListView list_items;
+//    private ListItemsAdapter mListItemsAdapter;
+//    private ArrayList<String> mItems;
+//
+//    public void firstInit(){
+//        list_items = (ListView) findViewById(R.id.list_items);
+//        mItems = new ArrayList<>();
+//    }
+//
+//    public void addItem(){
+//        mItems.add("item1");
+//        mItems.add("item2");
+//        mItems.add("item3");
+//        mItems.add("item4");
+//        mItems.add("item5");
+//    }
 }
 
     //ver2
