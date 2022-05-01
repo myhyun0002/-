@@ -86,19 +86,19 @@ public class MainActivity extends AppCompatActivity {
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
 //리스트뷰
-        firstInit(); //객체 초기화 및 생성
-        addItem(); //아이템 리스트 추가
-
-        mListItemsAdapter = new ListItemsAdapter(getApplicationContext(), mItems); //어댑터 객체 생성
-        list_items.setAdapter(mListItemsAdapter); //리스트뷰에 어댑터 적용
+//        firstInit(); //객체 초기화 및 생성
+//        addItem(); //아이템 리스트 추가
+//
+//        mListItemsAdapter = new ListItemsAdapter(getApplicationContext(), mItems); //어댑터 객체 생성
+//        list_items.setAdapter(mListItemsAdapter); //리스트뷰에 어댑터 적용
 
         //아이템 클릭했을 때 동작하는 클릭 리스너
-        list_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "position = "  + position + ", name=" + mItems.get(position), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        list_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "position = "  + position + ", name=" + mItems.get(position), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
 
