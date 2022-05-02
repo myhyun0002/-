@@ -1,5 +1,6 @@
 package com.example.wither;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
@@ -18,6 +19,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +53,7 @@ import com.naver.maps.map.util.FusedLocationSource;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -71,8 +76,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private HomeFloatingFragment homeFlaotingActionFragment;
     private FragmentActivity myContext;
 
-    // 데이터베이스 값 저장
-//    private MakeDatabase database;
+     //mongodb로부터 객체 가져오기
+    ArrayList<MakeDatabase> GET_database_set = new ArrayList<MakeDatabase>();
 
     // 마커
     ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -81,8 +86,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private InfoWindow infoWindow = new InfoWindow();
 
-    static int count = 1;
-
+    // 다른 thread에서 main thread에 접근하기 위한 선언
+    Handler mainHandler = new Handler(Looper.getMainLooper());
     public HomeFragment() {
 
     }
@@ -90,6 +95,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -98,6 +104,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        System.out.println(GET_database_set);
+
 
         // 현위치 버튼 클릭시 현재 위치로 이동과 함께 마커 표시
         ImageButton ShowLocationButton = (ImageButton)view.findViewById(R.id.gpsbtn);
@@ -119,12 +128,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 mNaverMap.moveCamera(cameraUpdate);
             }
         });
-
-        //activity에서 실시간 위치 정보 가져옴
-
-
-//        TextView textView = (TextView)view.findViewById(R.id.textView);
-//        textView.setText("위도는 " + getLatitude() + "\n 경도는 " + getLongitude()+"\n" + count);
 
         // 다른 탭으로 이동 후에 다시 돌아와도 지도 초기화 안되게 하는 코드
         MapView mapView;
@@ -161,15 +164,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-
         return view;
     }
 
-    // homeFloatingFragment에서 마커 생성 버튼을 누르면 정보를 받아와 지도에 마커 생성
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        // homeFloatingFragment에서 마커 생성 버튼을 누르면 정보를 받아와 지도에 마커 생성
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<MakeDatabase>() {
             @Override
@@ -197,7 +200,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         break;
                     }
                 }
-
                 return (View)adapter.getContentView(infoWindow);
             }
         });
@@ -218,13 +220,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if(bundle != null){
             setLatitude(bundle.getDouble("latitude"));
             setLongitude(bundle.getDouble("longitude"));
-
             setUserMarker(getLatitude(),getLongitude());
 
             CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
             mNaverMap.moveCamera(cameraUpdate);
         }
-
 
         // 현위치 버튼 , zoom버튼 생성
         UiSettings uiSettings = mNaverMap.getUiSettings();
@@ -240,6 +240,40 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setRotateGesturesEnabled(false);
         uiSettings.setScaleBarEnabled(false);
 
+        // 새로운 thread에서 mongodb로부터 GET으 로 받아오고 받아온 데이터를 처리하여 지도 위에 표시해준다.
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GET_database_set = MakeDatabase.json_to_database_set(MakeDatabase.GET());
+
+                int databases_size = databases.size();
+                try{
+                    for(int i = 0 ; i < GET_database_set.size();i++){
+                        MakeDatabase GET_database = GET_database_set.get(i);
+                        String category_String = GET_database.getMeeting_category();
+                        int resourceID = GET_database.getMarkerIcon_int(category_String);
+                        databases.add(GET_database);
+                        markers.add(GET_database.getMarker());
+                        infoWindows.add(GET_database.getInfoWindow());
+                    }
+                    // main Thread에서 무조건 실행되어야 할 코드라서 main thread로 접근한 뒤 수행한다.
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i = 0 ; i < databases.size();i++){
+                                setCategoryMarker(databases.get(i).getMarker(),databases.get(i));
+                            }
+                        } // This is your code
+                    };
+                    mainHandler.post(myRunnable);
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        th.start();
 
         // 화면 내의 마커만 표시하는 코드(미완성)- onMapReady안의 코드
 
@@ -295,7 +329,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 //        activeMarkers = new Vector<Marker>();
 //    }
 
-
+    // 사용자 현재 위치 마커
     private void setUserMarker(double lat, double lng){
         LocationOverlay locationOverlay = mNaverMap.getLocationOverlay();
         locationOverlay.setIconHeight(70);
@@ -307,35 +341,41 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationOverlay.setVisible(true);
     }
 
+    // 지도 위 마커 표시
     private void setCategoryMarker(Marker marker,MakeDatabase makeDatabase)
     {
+        Marker method_marker = marker;
+        MakeDatabase method_database = makeDatabase;
+
+        // 마커 생성 시 중복을 피하기 위한
+        Random random = new Random();
+        float randomNum = random.nextFloat();
+
         ViewGroup rootView = (ViewGroup)getView().findViewById(R.id.homeFragmentFrame);
         MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
 //        marker.set
         //아이콘 지정
-        marker.setIcon(OverlayImage.fromResource(makeDatabase.getResourceID()));
+        method_marker.setIcon(OverlayImage.fromResource(method_database.getResourceID()));
         //마커 위치
-        marker.setPosition(new LatLng(makeDatabase.getLatitude(), makeDatabase.getLongitude()));
+        method_marker.setPosition(new LatLng(method_database.getLatitude(), method_database.getLongitude()));
         //마커 표시
-        marker.setWidth(50);
-        marker.setHeight(50);
-        marker.setAnchor(new PointF(count, 2));
-        marker.setHideCollidedCaptions(true);
-        marker.setMap(mNaverMap);
+        method_marker.setWidth(50);
+        method_marker.setHeight(50);
+
+        method_marker.setAnchor(new PointF(randomNum, randomNum));
+        method_marker.setHideCollidedCaptions(true);
+        method_marker.setMap(mNaverMap);
 
         // 마커에 정보창 띄울 수 있는 권한을 부여
         // 마커를 누르면 정보창을 띄우게 해줌
-        marker.setOnClickListener(overlay -> {
+        method_marker.setOnClickListener(overlay -> {
 
             infoWindow.setZIndex(5);
                 //투명도 조정
             infoWindow.setAlpha(0.9f);
-            infoWindow.open(marker);
+            infoWindow.open(method_marker);
             return true;
         });
-
-
-        count /= 2;
     }
 
     public double getLatitude(){
@@ -352,6 +392,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void setLongitude(double longitude){
         this.longitude = longitude;
+    }
+
+    public void GET_Json_to_database(ArrayList<MakeDatabase> GET_database_set){
+        this.GET_database_set = GET_database_set;
     }
 
 }

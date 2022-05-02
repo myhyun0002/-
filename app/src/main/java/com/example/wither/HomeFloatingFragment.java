@@ -49,7 +49,6 @@ import java.util.TimeZone;
 public class HomeFloatingFragment extends Fragment implements Serializable {
 
     // 데이터베이스에 저장
-    MakeDatabase database = new MakeDatabase();
 
     //실시간 데이터 주고 받기(homeFragment와 homeFloatingFragment)
     private SharedViewModel sharedViewModel;
@@ -179,18 +178,24 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     infoWindow = new InfoWindow();
 
                                     //MakeDatabase에 저장.
-                                    database.setMeeting_name(getCreate_name_variable());
-                                    database.setMeeting_category(getCategory_string());
-                                    database.setMeeting_person(getCreate_person_num_variable());
-                                    database.setYear(getDate_year());
-                                    database.setMonth(getDate_month());
-                                    database.setDay(getDate_day());
-                                    database.setText_for_meeting_frient(getCreate_for_friend_variable());
-                                    database.setLatitude(getLatitude());
-                                    database.setLongitude(getLongitude());
-                                    database.setResourceID(database.setMarkerIcon(getCategory_string()));
-                                    database.setMarker(marker);
-                                    database.setInfoWindow(infoWindow);
+                                    MakeDatabase database = new MakeDatabase(getLatitude(),getLongitude(),
+                                            getCreate_name_variable(),getCreate_person_num_variable(),getCategory_string(),
+                                            getCreate_for_friend_variable(),
+                                            getDate_year(),getDate_month(),getDate_day()
+                                            );
+
+//                                    database.setMeeting_name(getCreate_name_variable());
+//                                    database.setMeeting_category(getCategory_string());
+//                                    database.setMeeting_person(getCreate_person_num_variable());
+//                                    database.setYear(getDate_year());
+//                                    database.setMonth(getDate_month());
+//                                    database.setDay(getDate_day());
+//                                    database.setText_for_meeting_frient(getCreate_for_friend_variable());
+//                                    database.setLatitude(getLatitude());
+//                                    database.setLongitude(getLongitude());
+//                                    database.setResourceID(database.setMarkerIcon(getCategory_string()));
+//                                    database.setMarker(marker);
+//                                    database.setInfoWindow(infoWindow);
 
                                     // 날짜 초기화
                                     setDate_day(0);
@@ -218,6 +223,13 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
                                     // homeFragment로 database 객체 데이터 전송
                                     sharedViewModel.setLiveData(database);
+
+                                    // Mongodb 데이터 저장.
+
+                                    new Thread(()->{
+                                        database.POST(database);
+                                    }).start();
+
                                 }
                             }
                         }
