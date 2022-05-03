@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -55,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     // 실시간 데이터 주고 받기
     private SharedViewModel sharedViewModel;
+    private SharedViewModel sharedViewModel_to_InfoWindowClickFragment;
 
     private LocationManager locationManager;
     private GpsTracker gpsTracker;
@@ -75,7 +78,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private HomeFloatingFragment homeFlaotingActionFragment;
     private FragmentActivity myContext;
+    private InfoWindowClickFragment infoWindowClickFragment;
 
+    int checking_floating = 0;
      //mongodb로부터 객체 가져오기
     ArrayList<MakeDatabase> GET_database_set = new ArrayList<MakeDatabase>();
 
@@ -137,30 +142,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this); // 비동기적 방식으로 구글 맵 실행
 
         // 홈화면 floatingbutton 누르면 HomeFloatingFragment 띄우기
-        FragmentManager fm = getChildFragmentManager();
+        FragmentManager fm = getParentFragmentManager();
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floatingActionButton);
         homeFlaotingActionFragment = new HomeFloatingFragment();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fm.findFragmentByTag("homefloatingbtn") != null) {
-                    //if the fragment exists, show it.
-                    fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
-                } else {
-                    //if the fragment does not exist, add it to fragment manager.
-                    //fm.beginTransaction().add(R.id.homeFragmentFrame, homeFlaotingActionFragment, "homefloatingbtn").commit();
+                try{
 
-                    Bundle bundle = new Bundle(3); // 번들을 통해 값 전달
-                    bundle.putDouble("latitude",getLatitude());//번들에 넘길 값 저장
-                    bundle.putDouble("longitude",getLongitude());//번들에 넘길 값 저장
-                    bundle.putBundle("long_latitudeBundle",bundle);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        Bundle bundle = new Bundle(3); // 번들을 통해 값 전달
+                        bundle.putDouble("latitude",getLatitude());//번들에 넘길 값 저장
+                        bundle.putDouble("longitude",getLongitude());//번들에 넘길 값 저장
+                        bundle.putBundle("long_latitudeBundle",bundle);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-                    HomeFloatingFragment homeFloatingFragment = new HomeFloatingFragment();//프래그먼트2 선언
-                    homeFloatingFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
-                    transaction.add(R.id.homeFragmentFrame, homeFloatingFragment);
-                    transaction.commit();
+                        HomeFloatingFragment homeFloatingFragment = new HomeFloatingFragment();//프래그먼트2 선언
+                        homeFloatingFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
+                        transaction.add(R.id.homeFragmentFrame, homeFloatingFragment);
+                        transaction.commit();
+
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -348,8 +351,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MakeDatabase method_database = makeDatabase;
 
         // 마커 생성 시 중복을 피하기 위한
-        Random random = new Random();
-        float randomNum = random.nextFloat();
 
         ViewGroup rootView = (ViewGroup)getView().findViewById(R.id.homeFragmentFrame);
         MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
@@ -362,9 +363,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         method_marker.setWidth(50);
         method_marker.setHeight(50);
 
-        method_marker.setAnchor(new PointF(randomNum, randomNum));
+        method_marker.setAnchor(new PointF(0, 0));
         method_marker.setHideCollidedCaptions(true);
         method_marker.setMap(mNaverMap);
+
+        sharedViewModel_to_InfoWindowClickFragment = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // 마커에 정보창 띄울 수 있는 권한을 부여
         // 마커를 누르면 정보창을 띄우게 해줌
@@ -374,6 +377,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 //투명도 조정
             infoWindow.setAlpha(0.9f);
             infoWindow.open(method_marker);
+            // 정보창 클릭 메서드
+            infoWindow.setOnClickListener(new Overlay.OnClickListener()
+            {
+                @Override
+                public boolean onClick(@NonNull Overlay overlay)
+                {
+
+                    sharedViewModel_to_InfoWindowClickFragment.setLiveData(method_database);
+                    infoWindowClickFragment = new InfoWindowClickFragment();
+
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.homeFragmentFrame, infoWindowClickFragment);
+                    transaction.commit();
+
+//                    Toast.makeText(getActivity(), method_database.getMeeting_name(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
             return true;
         });
     }
@@ -397,8 +418,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void GET_Json_to_database(ArrayList<MakeDatabase> GET_database_set){
         this.GET_database_set = GET_database_set;
     }
-
 }
+
 
 
 

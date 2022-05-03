@@ -8,7 +8,8 @@
     android:layout_alignParentEnd="true"
     tools:context=".HomeFragment"
     android:orientation="vertical"
-    android:id="@+id/homeFragmentFrame">
+    android:id="@+id/homeFragmentFrame"
+    android:clickable="true">
     <!-- TODO: Update blank fragment layout -->
 
 

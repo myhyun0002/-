@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.TimeZone;
 
 public class HomeFloatingFragment extends Fragment implements Serializable {
@@ -103,10 +104,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-
-        // 좌표 받아오기
-        //setLatitude(getArguments().getDouble("latitude"));
-        //setLongitude(getArguments().getDouble("longitude"));
 
         // 키보드 내리기 위한 코드
         keyboardDown = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -177,25 +174,19 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     marker = new Marker();
                                     infoWindow = new InfoWindow();
 
+                                    Random random = new Random();
+                                    float randomNum = random.nextFloat()/1000f;
+                                    float random_plus_minus = random.nextFloat();
+                                    if(random_plus_minus > 0.5){
+                                        randomNum = randomNum * -1;
+                                    }
+
                                     //MakeDatabase에 저장.
-                                    MakeDatabase database = new MakeDatabase(getLatitude(),getLongitude(),
+                                    MakeDatabase database = new MakeDatabase(getLatitude()+randomNum,getLongitude()+randomNum,
                                             getCreate_name_variable(),getCreate_person_num_variable(),getCategory_string(),
                                             getCreate_for_friend_variable(),
                                             getDate_year(),getDate_month(),getDate_day()
                                             );
-
-//                                    database.setMeeting_name(getCreate_name_variable());
-//                                    database.setMeeting_category(getCategory_string());
-//                                    database.setMeeting_person(getCreate_person_num_variable());
-//                                    database.setYear(getDate_year());
-//                                    database.setMonth(getDate_month());
-//                                    database.setDay(getDate_day());
-//                                    database.setText_for_meeting_frient(getCreate_for_friend_variable());
-//                                    database.setLatitude(getLatitude());
-//                                    database.setLongitude(getLongitude());
-//                                    database.setResourceID(database.setMarkerIcon(getCategory_string()));
-//                                    database.setMarker(marker);
-//                                    database.setInfoWindow(infoWindow);
 
                                     // 날짜 초기화
                                     setDate_day(0);
@@ -208,13 +199,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     create_for_friend_edit_text.setText(null);
                                     setCategory_string(null);
 
-                                    // database에 잘 들어갔는지 확인
-//                                    Toast.makeText(getActivity(),database.getMeeting_name() + "," + database.getMeeting_person() + ","+
-//                                            database.getText_for_meeting_frient()+"\n"+database.getYear()+ ","+ database.getMonth()+","
-//                                            +database.getDay() + "," + database.getMeeting_category()+
-//                                            "," + database.getLatitude() + "," +
-//                                            database.getLongitude(),Toast.LENGTH_LONG).show();
-
                                     // 플러스 버튼 fragment 종료
                                     FragmentManager fm = getParentFragmentManager();
                                     fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
@@ -225,7 +209,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     sharedViewModel.setLiveData(database);
 
                                     // Mongodb 데이터 저장.
-
                                     new Thread(()->{
                                         database.POST(database);
                                     }).start();
@@ -386,21 +369,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
     private void keyboradDownEditText(EditText editText){
         keyboardDown.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
-
-    // 시간 설정
-//    void showTime() {
-//        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-//            @Override
-//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                h = hourOfDay;
-//                mi = minute;
-//
-//            }
-//        }, 21, 12, true);
-//
-//        timePickerDialog.setMessage("메시지");
-//        timePickerDialog.show();
-//    }
 
 
     public int getDate_day() {
