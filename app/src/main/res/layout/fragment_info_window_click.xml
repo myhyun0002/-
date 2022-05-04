@@ -89,11 +89,8 @@
         android:layout_width="46dp"
         android:layout_height="31dp"
         android:layout_alignTop="@+id/create_person_text"
-        android:layout_toRightOf="@+id/info_create_person_num"
         android:layout_alignBottom="@+id/create_person_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="100dp"
         android:text="명"
         android:textColor="@color/black"
         android:textSize="18dp" />
@@ -103,18 +100,10 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/create_person_text"
-
         android:layout_alignBottom="@+id/create_person_text"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="141dp"
-        android:layout_marginBottom="1dp"
-        android:layout_toRightOf="@+id/create_person_text"
-        android:ems="10"
-        android:gravity="right"
+        android:layout_marginLeft="90dp"
         android:inputType="numberSigned"
         android:textColor="@color/black"
-        android:textColorHint="#808080"
         android:textSize="18dp" />
 
 

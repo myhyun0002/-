@@ -82,7 +82,10 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
     // 카테고리 list
     ArrayList<String> category_list;
+    ArrayList<String> person_num_list;
+
     private int category_true = 0;
+    private int person_num_true = 0;
     private String category_string = null;
 
     // mainactivity에서 위도 경도 받아오기
@@ -112,7 +115,7 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
         // 생성 버튼 리스너
         EditText create_name_edit_text = (EditText)view.findViewById(R.id.creat_name);
-        EditText create_person_num_edit_text = (EditText)view.findViewById(R.id.create_person_num);
+//        EditText create_person_num_edit_text = (EditText)view.findViewById(R.id.create_person_num);
         EditText create_for_friend_edit_text = (EditText)view.findViewById(R.id.create_for_friend);
 
         // 날짜 선택 버튼
@@ -124,7 +127,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                 showDate();
 
                 keyboradDownEditText(create_name_edit_text);
-                keyboradDownEditText(create_person_num_edit_text);
                 keyboradDownEditText(create_for_friend_edit_text);
             }
         });
@@ -145,12 +147,11 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                 } else {
                     //모임 이름이 공백이 아닐 때 처리할 내용
                     setCreate_name_variable(create_name_edit_text.getText().toString());
-                    if ( create_person_num_edit_text.getText().toString().length() == 0 ) {
+                    if ( getCreate_person_num_variable() == 0 ) {
                         //인원이 공백일 때 처리할 내용
                         Toast.makeText(getActivity(),"인원을 입력해주세요",Toast.LENGTH_SHORT).show();
                     } else {
                         //인원이 공백이 아닐 때 처리할 내용
-                        setCreate_person_num_variable(Integer.parseInt(create_person_num_edit_text.getText().toString()));
                         if ( create_for_friend_edit_text.getText().toString().length() == 0 ) {
                             //친구 메세지가 공백일 때 처리할 내용
                             Toast.makeText(getActivity(),"친구들에게 메세지를 전하세요",Toast.LENGTH_SHORT).show();
@@ -186,7 +187,7 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                             getCreate_name_variable(),getCreate_person_num_variable(),getCategory_string(),
                                             getCreate_for_friend_variable(),
                                             getDate_year(),getDate_month(),getDate_day()
-                                            );
+                                    );
 
                                     // 날짜 초기화
                                     setDate_day(0);
@@ -195,7 +196,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
                                     // 모든 값 초기화
                                     create_name_edit_text.setText(null);
-                                    create_person_num_edit_text.setText(null);
                                     create_for_friend_edit_text.setText(null);
                                     setCategory_string(null);
 
@@ -222,7 +222,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
         });
 
 
-
         // 취소 버튼
         Button cancel_button = view.findViewById(R.id.create_cancel_btn);
         cancel_button.setOnClickListener(new View.OnClickListener() {
@@ -233,76 +232,126 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
             }
         });
 
-        // 카테고리 리스트
-        category_list = new ArrayList<String>();
-        category_list_add();
+        Button person_num_button = view.findViewById(R.id.create_person_num_btn);
+        person_num_list = new ArrayList<String>();
 
-        //카테고리 리스트 보여주기
-        ListView category_list_view = (ListView)view.findViewById(R.id.category_list);
-        category_list_view.setVisibility(view.INVISIBLE);
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, category_list){
+        ListView person_num_list_view = (ListView)view.findViewById(R.id.person_num_list);
+        person_num_list_add();
 
-            // list text color -> black
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent)
-            {
-                View view = super.getView(position, convertView, parent);
-                TextView tv = (TextView) view.findViewById(android.R.id.text1);
-                tv.setTextColor(Color.BLACK);
-                return view;
-            }
-        };
-        category_list_view.setAdapter(listViewAdapter);
-
+        try{
+            person_num_list_view.setVisibility(view.INVISIBLE);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),
+                    R.layout.list_layout, person_num_list){
+            };
+            person_num_list_view.setAdapter(listViewAdapter);
 
         // 카테고리 리스트 클릭시 값 저장
-        Button category_button = view.findViewById(R.id.category_btn);
-        category_button.setOnClickListener(new View.OnClickListener() {
+
+        person_num_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 카테고리 리스트를 아무것도 터치하지 않았을 때
-                if(getCategory_true() == 0){
+                if(getPerson_num_true() == 0){
                     // 키보드 내리기
                     keyboradDownEditText(create_name_edit_text);
-                    keyboradDownEditText(create_person_num_edit_text);
                     keyboradDownEditText(create_for_friend_edit_text);
 
-                    category_list_view.setVisibility(View.VISIBLE);
-                    create_person_num_edit_text.setVisibility(View.INVISIBLE);
+                    person_num_list_view.setVisibility(View.VISIBLE);
                     date_button.setVisibility(View.INVISIBLE);
-                    person_textview1.setVisibility(View.INVISIBLE);
-                    person_textview2.setVisibility(View.INVISIBLE);
-                    date_picker_text.setVisibility(View.INVISIBLE);
-                    create_for_friend_edit_text.setVisibility(View.INVISIBLE);
-                    setCategory_true(1);
+//                    date_picker_text.setVisibility(View.INVISIBLE);
+//                    create_for_friend_edit_text.setVisibility(View.INVISIBLE);
+                    setPerson_num_true(1);
                 }else{
                     // 키보드 내리기
                     keyboradDownEditText(create_name_edit_text);
-                    keyboradDownEditText(create_person_num_edit_text);
                     keyboradDownEditText(create_for_friend_edit_text);
 
-                    category_list_view.setVisibility(View.INVISIBLE);
-                    create_person_num_edit_text.setVisibility(View.VISIBLE);
+                    person_num_list_view.setVisibility(View.INVISIBLE);
                     date_button.setVisibility(View.VISIBLE);
-                    person_textview1.setVisibility(View.VISIBLE);
-                    person_textview2.setVisibility(View.VISIBLE);
-                    date_picker_text.setVisibility(View.VISIBLE);
-                    create_for_friend_edit_text.setVisibility(View.VISIBLE);
-                    setCategory_true(0);
+//                    date_picker_text.setVisibility(View.VISIBLE);
+//                    create_for_friend_edit_text.setVisibility(View.VISIBLE);
+                    setPerson_num_true(0);
                 }
 
-                category_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                person_num_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        int check_position = category_list_view.getCheckedItemPosition();   //리스트뷰의 포지션을 가져옴.
-                        setCategory_string((String)listViewAdapter.getItem(position));  //리스트뷰의 포지션 내용을 가져옴.
-                        //Toast.makeText(getActivity(),getCategory_string(),Toast.LENGTH_SHORT).show();
-                        category_button.setText(getCategory_string());
+                        try{
+                            int check_position = person_num_list_view.getCheckedItemPosition();   //리스트뷰의 포지션을 가져옴.
+                            setCreate_person_num_variable(Integer.parseInt((String)listViewAdapter.getItem(position)));  //리스트뷰의 포지션 내용을 가져옴.
+                            //Toast.makeText(getActivity(),getCategory_string(),Toast.LENGTH_SHORT).show();
+                            person_num_button.setText((String)listViewAdapter.getItem(position));
 
-                        // 리스트 중 원하는 category를 클릭하면 바로 listview를 닫는다.
+                            // 리스트 중 원하는 category를 클릭하면 바로 listview를 닫는다.
+                            person_num_list_view.setVisibility(View.INVISIBLE);
+                            date_button.setVisibility(View.VISIBLE);
+//                            date_picker_text.setVisibility(View.VISIBLE);
+//                            create_for_friend_edit_text.setVisibility(View.VISIBLE);
+                            setPerson_num_true(0);
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+            }
+        });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        // 인원수 버튼 리스트뷰 코드
+
+
+        try{
+            category_list = new ArrayList<String>();
+            category_list_add();
+
+            //카테고리 리스트 보여주기
+            ListView category_list_view = (ListView)view.findViewById(R.id.category_list);
+            category_list_view.setVisibility(view.INVISIBLE);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_list_item_1, category_list){
+
+                // list text color -> black
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent)
+                {
+                    View view = super.getView(position, convertView, parent);
+                    TextView tv = (TextView) view.findViewById(android.R.id.text1);
+                    tv.setTextColor(Color.BLACK);
+                    return view;
+                }
+            };
+            category_list_view.setAdapter(listViewAdapter);
+
+
+            // 카테고리 리스트 클릭시 값 저장
+            Button category_button = view.findViewById(R.id.category_btn);
+            category_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 카테고리 리스트를 아무것도 터치하지 않았을 때
+                    if(getCategory_true() == 0){
+                        // 키보드 내리기
+                        keyboradDownEditText(create_name_edit_text);
+                        keyboradDownEditText(create_for_friend_edit_text);
+
+                        person_num_list_view.setVisibility(View.INVISIBLE);
+                        category_list_view.setVisibility(View.VISIBLE);
+                        person_num_button.setVisibility(View.INVISIBLE);
+                        date_button.setVisibility(View.INVISIBLE);
+                        person_textview1.setVisibility(View.INVISIBLE);
+                        person_textview2.setVisibility(View.INVISIBLE);
+                        date_picker_text.setVisibility(View.INVISIBLE);
+                        create_for_friend_edit_text.setVisibility(View.INVISIBLE);
+                        setCategory_true(1);
+                    }else{
+                        // 키보드 내리기
+                        keyboradDownEditText(create_name_edit_text);
+                        keyboradDownEditText(create_for_friend_edit_text);
+
                         category_list_view.setVisibility(View.INVISIBLE);
-                        create_person_num_edit_text.setVisibility(View.VISIBLE);
+                        person_num_button.setVisibility(View.VISIBLE);
                         date_button.setVisibility(View.VISIBLE);
                         person_textview1.setVisibility(View.VISIBLE);
                         person_textview2.setVisibility(View.VISIBLE);
@@ -310,9 +359,34 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                         create_for_friend_edit_text.setVisibility(View.VISIBLE);
                         setCategory_true(0);
                     }
-                });
-            }
-        });
+
+                    category_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            int check_position = category_list_view.getCheckedItemPosition();   //리스트뷰의 포지션을 가져옴.
+                            setCategory_string((String)listViewAdapter.getItem(position));  //리스트뷰의 포지션 내용을 가져옴.
+                            //Toast.makeText(getActivity(),getCategory_string(),Toast.LENGTH_SHORT).show();
+                            category_button.setText(getCategory_string());
+
+                            // 리스트 중 원하는 category를 클릭하면 바로 listview를 닫는다.
+                            person_num_list_view.setVisibility(View.INVISIBLE);
+                            category_list_view.setVisibility(View.INVISIBLE);
+                            person_num_button.setVisibility(View.VISIBLE);
+                            date_button.setVisibility(View.VISIBLE);
+                            person_textview1.setVisibility(View.VISIBLE);
+                            person_textview2.setVisibility(View.VISIBLE);
+                            date_picker_text.setVisibility(View.VISIBLE);
+                            create_for_friend_edit_text.setVisibility(View.VISIBLE);
+                            setCategory_true(0);
+                        }
+                    });
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        // 카테고리 리스트
+
 
         return view;
 
@@ -354,6 +428,12 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
         category_list.add("카페");
         category_list.add("영화");
         category_list.add("여행");
+    }
+
+    private void person_num_list_add(){
+        person_num_list.add("2");
+        person_num_list.add("3");
+        person_num_list.add("4");
     }
 
     private void hideKeyboard()
@@ -401,6 +481,14 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
     public void setCategory_true(int category_true){
         this.category_true = category_true;
+    }
+
+    public int getPerson_num_true(){
+        return person_num_true;
+    }
+
+    public void setPerson_num_true(int person_num_true){
+        this.person_num_true = person_num_true;
     }
 
     public String getCreate_name_variable() {

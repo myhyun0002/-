@@ -242,7 +242,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(false);
         uiSettings.setRotateGesturesEnabled(false);
         uiSettings.setScaleBarEnabled(false);
-
         // 새로운 thread에서 mongodb로부터 GET으 로 받아오고 받아온 데이터를 처리하여 지도 위에 표시해준다.
         Thread th = new Thread(new Runnable() {
             @Override
