@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,10 +83,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame, CategoryFragment.newInstance());
+        ft.commit();
+
         homeFragment = new HomeFragment();
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
+
+        //생성 버튼 클릭시 액티비티 전환
+        Button developer_info_btn = (Button) findViewById(R.id.make_btn);
+        developer_info_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), CategoryFragment.class);
+                startActivity(intent);
+            }
+        });
+//참여 버튼 클릭시 액티비티 전환
+        Button name_rule_btn = (Button) findViewById(R.id.join_btn);
+        name_rule_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), ReportFragment.class);
+                startActivity(intent);
+            }
+        });
+
 
         // 위치 확인
         if (!checkLocationServicesStatus()) {
