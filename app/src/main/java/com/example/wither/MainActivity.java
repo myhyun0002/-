@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,6 +23,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,9 +41,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    private double latitude,longitude;
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private double latitude, longitude;
 
     // fragment 변수 선언
     private HomeFragment homeFragment;
@@ -72,15 +83,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame, CategoryFragment.newInstance());
+        ft.commit();
+
         homeFragment = new HomeFragment();
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
 
+        //생성 버튼 클릭시 액티비티 전환
+        Button developer_info_btn = (Button) findViewById(R.id.make_btn);
+        developer_info_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), CategoryFragment.class);
+                startActivity(intent);
+            }
+        });
+//참여 버튼 클릭시 액티비티 전환
+        Button name_rule_btn = (Button) findViewById(R.id.join_btn);
+        name_rule_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(), ReportFragment.class);
+                startActivity(intent);
+            }
+        });
+
+
         // 위치 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
-        }else {
+        } else {
             checkRunTimePermission();
         }
 
@@ -98,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
                             longitude = location.getLongitude();
 
                             Bundle bundle = new Bundle(2);
-                            bundle.putDouble("latitude", latitude );
-                            bundle.putDouble("longitude", longitude );
+                            bundle.putDouble("latitude", latitude);
+                            bundle.putDouble("longitude", longitude);
                             homeFragment.setArguments(bundle);
                             homeFloatingFragment.setArguments(bundle);
                         }
@@ -124,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
                 switch (item.getItemId()) {
-                    case R.id.action_home:  {
+                    case R.id.action_home: {
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //프래그먼트가 존재한다면 보여준다.
                             fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("home"))).commit();
@@ -142,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    case R.id.action_chat:  {
+                    case R.id.action_chat: {
 
                         if (fragmentManager.findFragmentByTag("chatting") != null) {
                             //if the fragment exists, show it.
@@ -161,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    case R.id.action_user:  {
+                    case R.id.action_user: {
 
                         if (fragmentManager.findFragmentByTag("user") != null) {
                             //if the fragment exists, show it.
@@ -180,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    default:return false;
+                    default:
+                        return false;
                 }
             }
         });
@@ -243,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     // 여기서부터는 gps 받아오는 코드
     @Override
     public void onRequestPermissionsResult(int permsRequestCode,
@@ -267,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if(check_result) {
+            if (check_result) {
 
                 //위치 값을 가져올 수 있음
                 ;
@@ -291,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void checkRunTimePermission(){
+    void checkRunTimePermission() {
 
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
@@ -334,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 경도 위도를 통한 도로명 주소 도출 메서드
-    public String getCurrentAddress( double latitude, double longitude) {
+    public String getCurrentAddress(double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -366,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Address address = addresses.get(0);
-        return address.getAddressLine(0).toString()+"\n";
+        return address.getAddressLine(0).toString() + "\n";
 
     }
 
@@ -426,4 +461,3 @@ public class MainActivity extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 }
-
