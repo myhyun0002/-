@@ -19,7 +19,7 @@
         tools:targetApi="p">
 <!--        <meta-data-->
 <!--            android:name="com.google.android.actions" />-->
-         가로 모드 비활성화 : screenOrientation="portrait"
+<!--         가로 모드 비활성화 : screenOrientation="portrait"-->
         <activity
             android:name=".MainActivity"
             android:exported="true"

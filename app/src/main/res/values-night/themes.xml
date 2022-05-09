@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.Wither" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>  // 기본 버튼 생성 시 버튼 배경색 and 액션바(위더 있는 바) 색상
+        <item name="colorPrimary">@color/white</item>  // 기본 버튼 생성 시 버튼 배경색 and 액션바(위더 있는 바) 색상 , 위치 서비스 비활성화 알림창의 취소, 확인 버튼 생상
         <item name="colorPrimaryVariant">@color/teal_200</item>
         <item name="colorOnPrimary">@color/black</item>        // 기본 버튼 생성 시 text 색상
         <item name="android:textColor">@color/black</item>  // 기본 text 컬러
-        <item name="android:textColorPrimary">@color/main_color</item>  // 액션바 앱 이름 색상
+        <item name="android:textColorPrimary">@color/main_color</item>  // 액션바 앱 이름 색상 ,  위치 서비스 비활성화 알림창의 내용 문구 색상
 
         <!-- Secondary brand color. -->
         // 기본 생성 버튼 배경색(colorPrimary 색이 우선이다. 그 색이 black이면

@@ -20,6 +20,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,10 +50,10 @@ import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
 
-
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
+
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private double latitude, longitude;
 
@@ -65,10 +66,13 @@ public class MainActivity extends AppCompatActivity {
     private FragmentActivity myContext;
     FloatingActionButton fab;
 
+    // MainActivity에서 fragment로 데이터 보내기
+    Bundle bundle = new Bundle(3);
 
     // 두번 뒤로가기 눌렀을 때 앱 종료 자바 클래스
     private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
-// search 기능 진행중
+
+    // search 기능 진행중
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.menu,menu);
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             Bundle bundle = new Bundle(2);
                             bundle.putDouble("latitude", latitude);
                             bundle.putDouble("longitude", longitude);
+
                             homeFragment.setArguments(bundle);
                             homeFloatingFragment.setArguments(bundle);
                         }
@@ -291,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
             // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
 
             boolean check_result = true;
-
 
             // 모든 퍼미션을 허용했는지 체크합니다.
 
@@ -460,4 +464,10 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
 }
+
+
+
+
+
