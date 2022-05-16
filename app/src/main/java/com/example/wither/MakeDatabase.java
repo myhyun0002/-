@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class MakeDatabase implements Parcelable {
     // 9개 정보
+    private int id;
     private double latitude;
     private double longitude;
     private String meeting_name;
@@ -32,6 +33,7 @@ public class MakeDatabase implements Parcelable {
     private int day;
     private String text_for_meeting_friend;
     private int resourceID;
+    private int left_room_person;
 
     // marker 객체 저장
     Marker marker;
@@ -44,6 +46,7 @@ public class MakeDatabase implements Parcelable {
             int meeting_person,String meeting_category, String text_for_meeting_friend,
                         int year, int month, int day
                         ) {
+        this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.meeting_name = meeting_name;
@@ -63,6 +66,7 @@ public class MakeDatabase implements Parcelable {
     }
 
     protected MakeDatabase(Parcel in) {
+        id = in.readInt();
         latitude = in.readDouble();
         longitude = in.readDouble();
         meeting_name = in.readString();
@@ -186,6 +190,22 @@ public class MakeDatabase implements Parcelable {
 
     public void setInfoWindow(InfoWindow infoWindow) {
         this.infoWindow = infoWindow;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getLeft_room_person() {
+        return left_room_person;
+    }
+
+    public void setLeft_room_person(int left_room_person) {
+        this.left_room_person = left_room_person;
     }
 
     @Override
@@ -361,6 +381,7 @@ public class MakeDatabase implements Parcelable {
                     Integer.parseInt(jS[15]),
                     Integer.parseInt(jS[17]),
                     Integer.parseInt(jS[19]));
+            database.setId(Integer.parseInt(jS[21]));
             database_set.add(database);
         }
         return database_set;

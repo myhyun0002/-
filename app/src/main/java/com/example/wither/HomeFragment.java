@@ -24,9 +24,11 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 
@@ -80,7 +83,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private FragmentActivity myContext;
     private InfoWindowClickFragment infoWindowClickFragment;
 
-    int checking_floating = 0;
+    int checking_floating = 1;
+    int checking_floating_bundle = 0;
      //mongodb로부터 객체 가져오기
     ArrayList<MakeDatabase> GET_database_set = new ArrayList<MakeDatabase>();
 
@@ -110,8 +114,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        System.out.println(GET_database_set);
-
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
 
         // 현위치 버튼 클릭시 현재 위치로 이동과 함께 마커 표시
         ImageButton ShowLocationButton = (ImageButton)view.findViewById(R.id.gpsbtn);
@@ -146,21 +154,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floatingActionButton);
         homeFlaotingActionFragment = new HomeFloatingFragment();
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try{
+                    Bundle bundle = new Bundle(3); // 번들을 통해 값 전달
+                    bundle.putDouble("latitude",getLatitude());//번들에 넘길 값 저장
+                    bundle.putDouble("longitude",getLongitude());//번들에 넘길 값 저장
+                    bundle.putBundle("long_latitudeBundle",bundle);
 
-                        Bundle bundle = new Bundle(3); // 번들을 통해 값 전달
-                        bundle.putDouble("latitude",getLatitude());//번들에 넘길 값 저장
-                        bundle.putDouble("longitude",getLongitude());//번들에 넘길 값 저장
-                        bundle.putBundle("long_latitudeBundle",bundle);
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    HomeFloatingFragment homeFloatingFragment = new HomeFloatingFragment();//프래그먼트2 선언
+                    homeFloatingFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
 
-                        HomeFloatingFragment homeFloatingFragment = new HomeFloatingFragment();//프래그먼트2 선언
-                        homeFloatingFragment.setArguments(bundle);//번들을 프래그먼트2로 보낼 준비
-                        transaction.add(R.id.homeFragmentFrame, homeFloatingFragment);
-                        transaction.commit();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    transaction.add(R.id.homeFragmentFrame, homeFloatingFragment,"homeFloatingFragment");
+                    transaction.commit();
 
                 }catch(Exception e){
                     e.printStackTrace();
@@ -206,7 +216,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return (View)adapter.getContentView(infoWindow);
             }
         });
-
     }
 
     // 지도 마커 표시를 위한 메서드
@@ -225,7 +234,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             setLongitude(bundle.getDouble("longitude"));
             setUserMarker(getLatitude(),getLongitude());
 
-            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(getLatitude(), getLongitude()));
+            LatLng first_lating = new LatLng(getLatitude(), getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdate.scrollAndZoomTo(first_lating,15.5);
             mNaverMap.moveCamera(cameraUpdate);
         }
 
@@ -246,7 +256,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                GET_database_set = MakeDatabase.json_to_database_set(MakeDatabase.GET());
+                    GET_database_set = MakeDatabase.json_to_database_set(MakeDatabase.GET());
 
                 int databases_size = databases.size();
                 try{
@@ -353,6 +363,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         ViewGroup rootView = (ViewGroup)getView().findViewById(R.id.homeFragmentFrame);
         MarkerPointAdapter adapter = new MarkerPointAdapter(getActivity(), rootView);
+
 //        marker.set
         //아이콘 지정
         method_marker.setIcon(OverlayImage.fromResource(method_database.getResourceID()));
@@ -382,9 +393,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public boolean onClick(@NonNull Overlay overlay)
                 {
+//                    try{
+//                        FloatingActionButton button_floating = (FloatingActionButton) getView().findViewById(R.id.floatingActionButton) ;
+//                        button_floating.setEnabled(false);
+//                    }catch(Exception e){
+//                        e.printStackTrace();
+//                    }
 
                     sharedViewModel_to_InfoWindowClickFragment.setLiveData(method_database);
                     infoWindowClickFragment = new InfoWindowClickFragment();
+
 
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.add(R.id.homeFragmentFrame, infoWindowClickFragment);

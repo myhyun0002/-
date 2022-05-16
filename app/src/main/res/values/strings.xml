@@ -16,5 +16,5 @@
     <string name="목록">목록</string>
     <string name="nickname">NICKNAME</string>
     <string name="위더">위더</string>
-<!--    <item name="fragment_InfoWindowClick" type="id">fragment_InfoWindowClick</item>-->
+    <!--    <item name="fragment_InfoWindowClick" type="id">fragment_InfoWindowClick</item>-->
 </resources>

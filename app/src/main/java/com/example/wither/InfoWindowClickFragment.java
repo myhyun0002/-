@@ -1,5 +1,8 @@
 package com.example.wither;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,12 +11,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class InfoWindowClickFragment extends Fragment{
     MakeDatabase database ;
@@ -65,19 +72,26 @@ public class InfoWindowClickFragment extends Fragment{
             public void onClick(View view) {
                 FragmentManager fm = getParentFragmentManager();
                 fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
-
             }
         });
 
-        // 참여 버튼 눌렀을 때
-//        Button meet_button = view.findViewById(R.id.info_create_meet_btn);
-//        make_button.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fm = getParentFragmentManager();
-//                fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
-//            }
-//        });
+//         참여 버튼 눌렀을 때
+        Button meet_button = view.findViewById(R.id.info_create_meet_btn);
+        meet_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                try{
+                    Intent intent = new Intent(getActivity(),ChattingActivity.class);
+//                    intent.putExtra("database",getDatabase());
+                    intent.putExtra("chatting_room_num_string",String.valueOf(database.getId()));
+                    intent.putExtra("chatting_room_name_string",database.getMeeting_name());
+                    intent.putExtra("chatting_person_num_int",database.getMeeting_person());
+                    startActivity(intent);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
 
         return view;
     }
@@ -92,5 +106,25 @@ public class InfoWindowClickFragment extends Fragment{
 
     public String date(){
         return database.getYear() + "." + database.getMonth() + "." + database.getDay();
+    }
+
+    void showDialog() {
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(getActivity())
+                .setTitle("앱 끈다?")
+                .setMessage("진짜 끈다?")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "확인", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "취소", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
     }
 }

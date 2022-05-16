@@ -36,6 +36,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 
@@ -53,7 +54,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
 
     //실시간 데이터 주고 받기(homeFragment와 homeFloatingFragment)
     private SharedViewModel sharedViewModel;
-
 
     // fragment에서 context를 쓸려면 getActivity()
 
@@ -112,7 +112,6 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
         keyboardDown = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         View view = inflater.inflate(R.layout.fragment_home_floatingbtn, container, false);
-
         // 생성 버튼 리스너
         EditText create_name_edit_text = (EditText)view.findViewById(R.id.creat_name);
 //        EditText create_person_num_edit_text = (EditText)view.findViewById(R.id.create_person_num);
@@ -176,14 +175,31 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     infoWindow = new InfoWindow();
 
                                     Random random = new Random();
-                                    float randomNum = random.nextFloat()/1000f;
-                                    float random_plus_minus = random.nextFloat();
-                                    if(random_plus_minus > 0.5){
-                                        randomNum = randomNum * -1;
-                                    }
+
+
+//
+//
+//                                    float randomNum = random.nextFloat()/1000f;
+//                                    float random_plus_minus = random.nextFloat();
+//                                    if(random_plus_minus > 0.5){
+//                                        randomNum = randomNum * -1;
+//                                    }
+//
+                                    LatLng c = new LatLng(getLatitude(),getLongitude());
+                                    double d2r = Math.PI / 180;
+                                    double r2d = 180 / Math.PI;
+                                    double earth_rad = 6378000f; //지구 반지름 근사값
+
+                                    double r = new Random().nextInt(30) + new Random().nextDouble();
+                                    double rlat = (r / earth_rad) * r2d;
+                                    double rlng = rlat / Math.cos(c.latitude * d2r);
+
+                                    double theta = Math.PI * (new Random().nextInt(2) + new Random().nextDouble());
+                                    double y = c.longitude + (rlng * Math.cos(theta));
+                                    double x = c.latitude + (rlat * Math.sin(theta));
 
                                     //MakeDatabase에 저장.
-                                    MakeDatabase database = new MakeDatabase(getLatitude()+randomNum,getLongitude()+randomNum,
+                                    MakeDatabase database = new MakeDatabase(x,y,
                                             getCreate_name_variable(),getCreate_person_num_variable(),getCategory_string(),
                                             getCreate_for_friend_variable(),
                                             getDate_year(),getDate_month(),getDate_day()
@@ -199,11 +215,16 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
                                     create_for_friend_edit_text.setText(null);
                                     setCategory_string(null);
 
+                                    HomeFragment homeFragment = new HomeFragment();
+
+                                    Bundle bundle = new Bundle(1);
+                                    bundle.putInt("checking_floating",0);
+                                    homeFragment.setArguments(bundle);
+
                                     // 플러스 버튼 fragment 종료
                                     FragmentManager fm = getParentFragmentManager();
                                     fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
 
-                                    HomeFragment homeFragment = new HomeFragment();
 
                                     // homeFragment로 database 객체 데이터 전송
                                     sharedViewModel.setLiveData(database);
@@ -221,13 +242,13 @@ public class HomeFloatingFragment extends Fragment implements Serializable {
             }
         });
 
-
         // 취소 버튼
         Button cancel_button = view.findViewById(R.id.create_cancel_btn);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getParentFragmentManager();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                //fm.beginTransaction().remove(fm.findFragmentById(R.id.for_hide_fragment)).commit();
                 fm.beginTransaction().remove(fm.findFragmentById(R.id.homeFragmentFrame)).commit();
             }
         });

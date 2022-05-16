@@ -11,6 +11,7 @@
     android:background="@drawable/alert_white_border"
     tools:ignore="ExtraText"
     android:id="@+id/fragment_home_floating_btn"
+    android:clickable="true"
     >
 
     <!--android:background="@drawable/blackline"-->

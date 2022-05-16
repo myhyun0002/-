@@ -11,7 +11,7 @@
         <!-- Secondary brand color. -->
         // 기본 생성 버튼 배경색(colorPrimary 색이 우선이다. 그 색이 black이면
         // 기본 버튼 색이 black으로 변한다.
-        <item name="colorSecondary">@color/main_color</item>
+        <item name="colorSecondary">@color/main_color</item>    // floating button의 주변 선 색
         <item name="colorSecondaryVariant">@color/black</item>  // 기본 생성 버튼 이름 색
         <item name="colorOnSecondary">@color/black</item>   // 홈 화면에 목록버튼 색(다른건 안변하고 이것만 변함)
         <!-- Status bar color. -->
@@ -24,6 +24,11 @@
     <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/main_color</item>
         <item name="android:textColor">@color/main_color</item>
+    </style>
+
+    // 경고창 색상 바꾸기
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">#EAEAEA</item>
     </style>
 
 </resources>

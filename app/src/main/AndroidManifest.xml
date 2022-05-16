@@ -17,9 +17,10 @@
         android:theme="@style/Theme.Wither"
         tools:replace="android:appComponentFactory"
         tools:targetApi="p">
-<!--        <meta-data-->
-<!--            android:name="com.google.android.actions" />-->
-<!--         가로 모드 비활성화 : screenOrientation="portrait"-->
+
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.actions" /> -->
+        <!-- 가로 모드 비활성화 : screenOrientation="portrait" -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,6 +32,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ChattingActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+        </activity>
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="wayunkrpqw" />
