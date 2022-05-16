@@ -21,7 +21,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,10 +49,10 @@ import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
 
+
     // gps 관련 변수들
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private double latitude, longitude;
 
@@ -66,13 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private FragmentActivity myContext;
     FloatingActionButton fab;
 
-    // MainActivity에서 fragment로 데이터 보내기
-    Bundle bundle = new Bundle(3);
 
     // 두번 뒤로가기 눌렀을 때 앱 종료 자바 클래스
     private final BackKeyHandler backKeyHandler = new BackKeyHandler(this);
-
-    // search 기능 진행중
+// search 기능 진행중
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.menu,menu);
@@ -91,6 +87,22 @@ public class MainActivity extends AppCompatActivity {
         chattingFragment = new ChattingFragment();
         userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
+//리스트뷰
+//        firstInit(); //객체 초기화 및 생성
+//        addItem(); //아이템 리스트 추가
+//
+//        mListItemsAdapter = new ListItemsAdapter(getApplicationContext(), mItems); //어댑터 객체 생성
+//        list_items.setAdapter(mListItemsAdapter); //리스트뷰에 어댑터 적용
+
+        //아이템 클릭했을 때 동작하는 클릭 리스너
+//        list_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "position = "  + position + ", name=" + mItems.get(position), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
 
         // 위치 확인
         if (!checkLocationServicesStatus()) {
@@ -115,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                             Bundle bundle = new Bundle(2);
                             bundle.putDouble("latitude", latitude);
                             bundle.putDouble("longitude", longitude);
-
                             homeFragment.setArguments(bundle);
                             homeFloatingFragment.setArguments(bundle);
                         }
@@ -272,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
             // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
 
             boolean check_result = true;
+
 
             // 모든 퍼미션을 허용했는지 체크합니다.
 
@@ -440,9 +452,62 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
 }
 
+    //ver2
+
+
+    //adapter class
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        ListView listView = findViewById(R.id.listView);
+//        CategoryAdapter adapter = new CategoryAdapter();
+//        adapter.addItem(new CategoryList("blackFish", "010-1000-1000", R.drawable.category_ic_cigarette));
+//        adapter.addItem(new CategoryList("redFish", "010-1000-1001", R.drawable.category_ic_baseball));
+//        listView.setAdapter(adapter);
+//
+//    }
+
+//    class CategoryAdapter extends BaseAdapter {
+//        ArrayList<CategoryList> items = new ArrayList<CategoryList>();
+//
+//        @Override
+//        public int getCount() {
+//            return items.size();
+//        }
+//
+//        public void addItem(CategoryList item){
+//            items.add(item);
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return items.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            CategoryListView categoryListView = null;
+//
+//            if (convertView == null) {
+//                categoryListView = new CategoryListView(getApplicationContext());
+//            } else {
+//                categoryListView = (CategoryListView) convertView;
+//            }
+//            CategoryList item = items.get(position);
+//            categoryListView.setName(item.getName());
+//            categoryListView.setMobile(item.getMobile());
+//            categoryListView.setImage(item.getResld());
+//            return categoryListView;
+//            }
 
 
 
