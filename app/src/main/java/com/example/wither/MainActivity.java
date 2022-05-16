@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     // fragment 변수 선언
     private HomeFragment homeFragment;
     private ChattingFragment chattingFragment;
-    private UserFragment userFragment;
+    //private UserFragment userFragment;
     private HomeFloatingFragment homeFloatingFragment;
 
     private FragmentActivity myContext;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         homeFragment = new HomeFragment();
         chattingFragment = new ChattingFragment();
-        userFragment = new UserFragment();
+        //userFragment = new UserFragment();
         homeFloatingFragment = new HomeFloatingFragment();
 //리스트뷰
 //        firstInit(); //객체 초기화 및 생성
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                             fragmentManager.beginTransaction().show(Objects.requireNonNull(fragmentManager.findFragmentByTag("user"))).commit();
                         } else {
                             //if the fragment does not exist, add it to fragment manager.
-                            fragmentManager.beginTransaction().add(R.id.main_frame, new UserFragment(), "user").commit();
+                            //fragmentManager.beginTransaction().add(R.id.main_frame, new UserFragment(), "user").commit();
                         }
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             //if the other fragment is visible, hide it.

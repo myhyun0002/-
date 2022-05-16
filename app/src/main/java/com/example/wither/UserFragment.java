@@ -1,4 +1,22 @@
-package com.example.wither;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.wither.CategoryFragment;
+import com.example.wither.ReportFragment;
+
+/**import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.wither.CategoryFragment;
+import com.example.wither.ReportFragment;
+
+/**package com.example.wither;
 
 import android.os.Bundle;
 
@@ -12,12 +30,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.wither.CategoryFragment;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link UserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-    public class UserFragment extends Fragment implements
+   /** public class UserFragment extends Fragment implements
 
     public static UserFragment newInstance() {
         return new UserFragment();
@@ -27,7 +47,7 @@ import android.widget.Button;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.UserFragment);
+        //setContentView(R.layout.UserFragment);
     }
 
     @Override
@@ -71,4 +91,4 @@ import android.widget.Button;
             userFt.commit();
         }
     }
-}
+}**/
